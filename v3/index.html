@@ -133,7 +133,7 @@
     .back-btn {
       display: inline-flex; align-items: center; gap: 10px;
       font-size: 16px; color: var(--ink-2);
-      padding: 10px 14px; margin-left: -14px;
+      padding: 10px 14px; margin-left: 0;
       border-radius: 10px;
       transition: var(--t);
     }
@@ -482,12 +482,15 @@
         box-shadow: none;
         padding: 0 18px;
       }
+      .reassure-item { justify-content: flex-start; padding: 22px 6px; gap: 10px; }
       .grid-cols-5 { grid-template-columns: repeat(2, 1fr); }
       .grid-cols-4 { grid-template-columns: repeat(2, 1fr); }
       .grid-cols-3 { grid-template-columns: repeat(2, 1fr); }
       .title { font-size: 26px; }
       .review-trust { display: none; }
-      .brand img { height: 52px; }
+      .brand img { height: 56px; }
+      .back-btn span { display: none; }
+      .back-btn { gap: 0; padding: 8px 10px; }
       .brand-strip { padding: 14px 18px; gap: 12px; }
       .brand-strip-label { display: none; }
       .form-grid { grid-template-columns: 1fr; }
