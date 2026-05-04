@@ -993,9 +993,29 @@
       .success-summary { grid-template-columns: repeat(2, 1fr); }
       .reassure { grid-template-columns: 1fr; }
       /* Calendar — stack date picker and time slots vertically */
-      .cal-pickers { grid-template-columns: 1fr; gap: 20px; }
+      /* Calendar + slots merge into one card on mobile so they read as a
+         single panel instead of two stacked boxes. */
+      .cal-pickers {
+        grid-template-columns: 1fr;
+        gap: 0;
+        background: var(--paper-2);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 14px 16px 18px;
+      }
       .cal-month { display: none; }
-      .cal-week  { display: block; }
+      .cal-week  {
+        display: block;
+        background: transparent;
+        border: 0;
+        padding: 0;
+        border-radius: 0;
+      }
+      .slots-wrap {
+        margin-top: 14px;
+        padding-top: 14px;
+        border-top: 1px solid var(--line);
+      }
       .quick-pick { gap: 10px; padding: 12px 14px; }
       .qp-icon { width: 32px; height: 32px; }
       .qp-title { font-size: 13.5px; }
