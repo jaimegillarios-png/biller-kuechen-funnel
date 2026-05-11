@@ -3,3 +3,8 @@ node_modules/
 src/
 unpack.py
 .claude/
+
+# Working artifacts — saved-page sources not safe to publish
+**/_source.html
+v11/source.html
+v11/Küchenmesse entdecken _ MÖBEL MARTIN_files/

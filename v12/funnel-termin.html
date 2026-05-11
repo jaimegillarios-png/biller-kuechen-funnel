@@ -145,10 +145,11 @@
     .modal-head .back-btn { font-size: 14px; padding: 6px 10px; margin-left: -2px; gap: 6px; justify-self: start; }
     .modal-head .back-btn svg { width: 15px; height: 15px; }
     .modal-head__title {
-      font-size: 15px;
-      font-weight: 600;
+      font-size: 13px;
+      font-weight: 400;
       color: var(--ink-3);
-      letter-spacing: -0.01em;
+      letter-spacing: 1px;
+      text-transform: uppercase;
       text-align: center;
       white-space: nowrap;
       overflow: hidden;
@@ -616,6 +617,45 @@
       display: flex; flex-direction: column; gap: 10px;
       max-width: 560px; margin: 0 auto; width: 100%;
     }
+    .list-search {
+      position: relative;
+      display: flex; align-items: center;
+      margin-bottom: 4px;
+    }
+    .list-search-icon {
+      position: absolute; left: 14px;
+      color: var(--ink-3);
+      pointer-events: none;
+    }
+    .list-search-input {
+      width: 100%;
+      padding: 12px 38px 12px 38px;
+      border: 1.5px solid var(--line);
+      border-radius: 12px;
+      background: var(--paper-2);
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--ink);
+      outline: none;
+      transition: var(--t);
+    }
+    .list-search-input::placeholder { color: var(--ink-3); }
+    .list-search-input:focus {
+      border-color: var(--accent);
+      background: white;
+      box-shadow: 0 0 0 3px var(--accent-soft);
+    }
+    .list-search-clear {
+      position: absolute; right: 8px;
+      width: 26px; height: 26px;
+      display: grid; place-items: center;
+      border-radius: 999px;
+      color: var(--ink-3);
+      background: transparent;
+      border: 0; cursor: pointer;
+      transition: var(--t);
+    }
+    .list-search-clear:hover { background: var(--bg-2); color: var(--ink); }
     .region-pills {
       display: flex; flex-wrap: wrap; gap: 8px;
       margin-bottom: 6px;
@@ -831,16 +871,16 @@
       display: inline-flex; align-items: center; justify-content: center; gap: 8px;
       padding: 14px 22px;
       border-radius: 12px;
-      background: var(--accent);
-      color: white;
+      background: var(--ink);
+      color: var(--paper);
       font-size: 15px; font-weight: 600;
       letter-spacing: -0.005em;
       transition: var(--t);
+      box-shadow: 0 6px 18px -8px rgba(26,29,27,0.4);
     }
     .cal-confirm:hover:not(:disabled) {
-      background: #5e1a30;
       transform: translateY(-1px);
-      box-shadow: 0 10px 24px -10px rgba(120,30,57,0.45);
+      box-shadow: 0 12px 24px -10px rgba(26,29,27,0.45);
     }
     .cal-confirm:disabled {
       opacity: 0.45;
@@ -1566,7 +1606,7 @@
       {
         id: "studio",
         title: "Wählen Sie Ihr Küchenstudio",
-        subtitle: "Welcher Standort ist Ihnen am nächsten?",
+        subtitle: "",
         type: "list",
         options: [
           { id: "HOF",          label: "Möbelcenter Hof",          hint: "An den Mühlwiesen 2, Hof/Moschendorf", region: "Bayern" },
@@ -1574,12 +1614,16 @@
           { id: "MUENCHEN",     label: "Möbelcenter München",      hint: "Landsberger Straße 380A, München",    region: "Bayern" },
           { id: "MUENCHEN_OST", label: "Möbelcenter München Ost",  hint: "Thomas-Dehler-Straße 9, München",     region: "Bayern" },
           { id: "PLAUEN",       label: "Möbelcenter Plauen",       hint: "Rosa-Luxemburg-Platz 7, Plauen",      region: "Sachsen" },
+          { id: "NUERNBERG",    label: "Möbelcenter Nürnberg",      hint: "Marienbergstraße 102, Nürnberg",       region: "Bayern" },
+          { id: "REGENSBURG",   label: "Möbelcenter Regensburg",    hint: "Donaustaufer Straße 200, Regensburg",  region: "Bayern" },
+          { id: "AUGSBURG",     label: "Möbelcenter Augsburg",      hint: "Max-Josef-Metzger-Straße 5, Augsburg", region: "Bayern" },
+          { id: "DRESDEN",      label: "Möbelcenter Dresden",       hint: "Hansastraße 39, Dresden",              region: "Sachsen" },
         ],
       },
       {
         id: "beratung",
         title: "Wie möchten Sie beraten werden?",
-        subtitle: "Vor Ort im Studio oder bequem bei Ihnen Zuhause.",
+        subtitle: "",
         type: "grid", cols: 2,
         options: [
           { id: "STUDIO", label: "Im Küchenstudio",  hint: "Persönliche Beratung vor Ort", glyph: Studio },
@@ -1950,11 +1994,39 @@
 
     // ─────────────────────────── List step (rich rows, e.g. studio picker) ───────────────────────────
     function ListStep({ step, selected, onPick }) {
-      const filtered = step.options;
+      const [query, setQuery] = useState("");
+      const q = query.trim().toLowerCase();
+      const filtered = q
+        ? step.options.filter(o =>
+            (o.label || "").toLowerCase().includes(q) ||
+            (o.hint  || "").toLowerCase().includes(q) ||
+            (o.region|| "").toLowerCase().includes(q))
+        : step.options;
       return (
         <div className="list-rich">
+          <div className="list-search">
+            <svg className="list-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="1.7"/>
+              <path d="m20 20-3.5-3.5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/>
+            </svg>
+            <input
+              type="search"
+              className="list-search-input"
+              placeholder="Studio oder Stadt suchen…"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              autoComplete="off"
+            />
+            {query && (
+              <button type="button" className="list-search-clear" onClick={() => setQuery("")} aria-label="Suche zurücksetzen">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <path d="M3 3l8 8M11 3l-8 8" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/>
+                </svg>
+              </button>
+            )}
+          </div>
           {filtered.length === 0 ? (
-            <div className="list-empty">Kein Studio verfügbar.</div>
+            <div className="list-empty">Keine Studios gefunden.</div>
           ) : (
             filtered.map((opt) => (
               <button
