@@ -63,6 +63,14 @@
       backdrop-filter: none;
       -webkit-backdrop-filter: none;
     }
+    /* Desktop: anchor the iframed funnel near the top of the viewport
+       instead of vertically centering it. */
+    @media (min-width: 880px) {
+      html.iframed-standalone .page {
+        justify-content: flex-start;
+        padding-top: 8vh;
+      }
+    }
     .embedded .page {
       padding: 0;
       background: transparent;
