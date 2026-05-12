@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<title>Glyph library · Traumküche funnel</title>
+<style>
+  *,*:before,*:after{box-sizing:border-box}
+  body{margin:0;padding:48px 32px;font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#1a1a1a;background:#fafafa}
+  header{max-width:1100px;margin:0 auto 40px}
+  h1{font-size:28px;margin:0 0 8px;letter-spacing:-0.4px}
+  p.lead{margin:0;color:#6a6a6a;max-width:640px;line-height:1.55}
+  .toolbar{max-width:1100px;margin:24px auto;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  .toolbar input{padding:10px 14px;border:1px solid #e0e0e0;border-radius:8px;font-size:14px;font-family:inherit;width:280px;outline:none}
+  .toolbar input:focus{border-color:#781e39}
+  .toolbar label{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:#6a6a6a}
+  .toolbar select,.toolbar button{padding:8px 12px;border:1px solid #e0e0e0;border-radius:8px;font-size:13px;font-family:inherit;background:#fff;cursor:pointer}
+  main{max-width:1100px;margin:0 auto}
+  section.group{margin-bottom:48px}
+  section.group h2{font-size:13px;font-weight:600;color:#781e39;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 16px;border-bottom:1px solid #e6e6e6;padding-bottom:8px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px}
+  .card{background:#fff;border:1px solid #e6e6e6;border-radius:12px;padding:16px 12px;display:flex;flex-direction:column;align-items:center;gap:10px;transition:border-color .15s,box-shadow .15s}
+  .card:hover{border-color:#781e39;box-shadow:0 6px 20px -10px rgba(0,0,0,.15)}
+  .glyph-frame{width:100%;aspect-ratio:4/3;display:grid;place-items:center;background:#f7f7f7;border-radius:8px;color:#1a1d1b;padding:8px}
+  .glyph-frame svg{width:100%;height:100%;display:block}
+  .meta{width:100%;display:flex;flex-direction:column;gap:2px;align-items:center;text-align:center}
+  .name{font-size:12.5px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#1a1a1a;word-break:break-all}
+  .copy{font-size:11px;color:#9a9a9a;cursor:pointer;user-select:none;padding:2px 6px;border-radius:4px;transition:background .15s}
+  .copy:hover{background:#eef0f2;color:#1a1a1a}
+  .copy.copied{color:#1a8d3a;background:#e8f5ec}
+  .empty{padding:80px 0;text-align:center;color:#9a9a9a;font-size:14px}
+  body.dark{background:#1a1a1a;color:#fafafa}
+  body.dark .card{background:#262626;border-color:#3a3a3a;color:#fafafa}
+  body.dark .glyph-frame{background:#1a1a1a;color:#fafafa}
+  body.dark .copy{color:#6a6a6a}
+  body.dark .name{color:#fafafa}
+  body.dark .toolbar input,body.dark .toolbar select,body.dark .toolbar button{background:#262626;border-color:#3a3a3a;color:#fafafa}
+  body.dark section.group h2{border-bottom-color:#3a3a3a}
+</style>
+</head>
+<body>
+<header>
+  <h1>Glyph library</h1>
+  <p class="lead">All option icons used inside the Traumküche funnel. Drop a new SVG into <code>v13/assets/glyphs/</code> following the contract in <code>README.md</code>, then run <code>./build.sh</code> to regenerate <code>manifest.json</code> and refresh this page.</p>
+</header>
+<div class="toolbar">
+  <input type="search" id="q" placeholder="Filter by name…" autocomplete="off">
+  <label><input type="checkbox" id="dark"> Dark mode</label>
+  <label>Size:
+    <select id="size">
+      <option value="80">80 px</option>
+      <option value="120" selected>120 px</option>
+      <option value="160">160 px</option>
+    </select>
+  </label>
+  <span style="margin-left:auto;color:#9a9a9a;font-size:12px" id="count"></span>
+</div>
+<main id="main"><p class="empty">Loading…</p></main>
+<script>
+(async function(){
+  const main = document.getElementById('main');
+  const qInput = document.getElementById('q');
+  const sizeSel = document.getElementById('size');
+  const darkCb = document.getElementById('dark');
+  const counter = document.getElementById('count');
+  let manifest;
+  try { manifest = await (await fetch('./manifest.json',{cache:'no-cache'})).json(); }
+  catch(e){ main.innerHTML = '<p class="empty">Could not load manifest.json</p>'; return; }
+  const allGroups = manifest.groups || {};
+  const allNames = Object.values(allGroups).flat();
+
+  function render(){
+    const q = qInput.value.trim().toLowerCase();
+    const size = parseInt(sizeSel.value,10);
+    main.innerHTML = '';
+    let shown = 0;
+    Object.entries(allGroups).forEach(([groupName, names])=>{
+      const filtered = names.filter(n => !q || n.toLowerCase().includes(q));
+      if (!filtered.length) return;
+      const sec = document.createElement('section');
+      sec.className = 'group';
+      sec.innerHTML = `<h2>${groupName} <span style="color:#9a9a9a;font-weight:400;text-transform:none;letter-spacing:0">(${filtered.length})</span></h2><div class="grid"></div>`;
+      const grid = sec.querySelector('.grid');
+      filtered.forEach(name=>{
+        shown++;
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <div class="glyph-frame" style="max-width:${size}px"></div>
+          <div class="meta">
+            <span class="name">${name}</span>
+            <span class="copy" data-name="${name}">copy name</span>
+          </div>`;
+        const frame = card.querySelector('.glyph-frame');
+        fetch(`./${name}.svg`).then(r=>r.text()).then(svg=>{ frame.innerHTML = svg; });
+        grid.appendChild(card);
+      });
+      main.appendChild(sec);
+    });
+    counter.textContent = `${shown} / ${allNames.length} glyphs`;
+    if (!shown) main.innerHTML = '<p class="empty">No glyphs match that filter.</p>';
+  }
+
+  qInput.addEventListener('input', render);
+  sizeSel.addEventListener('change', render);
+  darkCb.addEventListener('change', () => document.body.classList.toggle('dark', darkCb.checked));
+  main.addEventListener('click', e => {
+    if (!e.target.classList.contains('copy')) return;
+    const name = e.target.dataset.name;
+    navigator.clipboard.writeText(name).then(() => {
+      e.target.classList.add('copied');
+      e.target.textContent = '✓ copied';
+      setTimeout(() => { e.target.classList.remove('copied'); e.target.textContent = 'copy name'; }, 1200);
+    });
+  });
+  render();
+})();
+</script>
+</body>
+</html>

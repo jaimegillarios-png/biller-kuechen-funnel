@@ -1,0 +1,29 @@
+{
+  "groups": {
+    "budget": [
+      "budget-tier-1",
+      "budget-tier-2",
+      "budget-tier-3",
+      "budget-tier-4",
+      "budget-tier-5"
+    ],
+    "location": [
+      "location-home",
+      "location-studio"
+    ],
+    "shape": [
+      "shape-island",
+      "shape-kitchenette",
+      "shape-l-form",
+      "shape-other",
+      "shape-two-liner",
+      "shape-u-form"
+    ],
+    "timing": [
+      "timing-1-3",
+      "timing-12plus",
+      "timing-4-6",
+      "timing-7-12"
+    ]
+  }
+}

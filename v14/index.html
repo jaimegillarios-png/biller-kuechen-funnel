@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Funnel variants</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  :root {
+    --ink:        #14110f;
+    --ink-2:      #4a443f;
+    --ink-3:      #8a8278;
+    --ink-4:      #b9b3aa;
+    --line:       #e8e2d8;
+    --line-2:     #d6cdbe;
+    --paper:      #ffffff;
+    --paper-2:    #fbf8f3;
+    --accent:     #781e39;
+    --accent-2:   #5e1a30;
+    --accent-soft:#f7edf0;
+  }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--ink);
+    background: var(--paper-2);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; }
+
+  /* ─── Page intro ─── */
+  .intro {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 80px 32px 48px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .intro__text { max-width: 680px; flex: 1 1 auto; min-width: 280px; }
+
+  /* ─── Preview-mode toggle (Desktop / Mobile) ─── */
+  .preview-toggle {
+    display: inline-flex;
+    align-items: center;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 4px;
+    gap: 2px;
+    flex-shrink: 0;
+  }
+  .preview-toggle__label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    padding: 0 12px 0 8px;
+  }
+  .preview-toggle button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border: 0;
+    background: transparent;
+    color: var(--ink-3);
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+  .preview-toggle button:hover { color: var(--ink); }
+  .preview-toggle button.is-active {
+    background: var(--ink);
+    color: #fff;
+  }
+  .preview-toggle button svg { width: 14px; height: 14px; }
+  .intro p.eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 14px;
+  }
+  .intro h1 {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(32px, 4vw, 44px);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin: 0 0 16px;
+    color: var(--ink);
+  }
+  .intro p.lead {
+    max-width: 680px;
+    font-size: 16px;
+    color: var(--ink-2);
+    margin: 0;
+  }
+
+  /* ─── Variant sections ─── */
+  .sections {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px 96px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+  .section {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 32px;
+  }
+  .section__head {
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--line);
+  }
+  .section__kicker {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 10px;
+  }
+  .section__title {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    margin: 0 0 6px;
+    color: var(--ink);
+  }
+  .section__sub {
+    font-size: 14px;
+    color: var(--ink-3);
+    margin: 0;
+  }
+
+  /* ─── Variant cards ─── */
+  .variants {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .variant {
+    background: var(--paper-2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .variant:hover {
+    border-color: var(--line-2);
+    box-shadow: 0 6px 18px -10px rgba(20,17,15,0.18);
+  }
+  .variant__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .variant__name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+    margin: 0;
+    letter-spacing: -0.005em;
+  }
+  .variant__id {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 11px;
+    color: var(--ink-4);
+    background: var(--paper);
+    border: 1px solid var(--line);
+    padding: 2px 8px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+  .variant__desc {
+    margin: 0;
+    font-size: 13.5px;
+    color: var(--ink-2);
+    line-height: 1.55;
+  }
+  .variant__btn {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--ink);
+    color: #fff;
+    border: 0;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-weight: 500;
+    letter-spacing: 0.005em;
+    transition: background 0.15s;
+  }
+  .variant__btn:hover { background: var(--accent); }
+  .variant__btn svg { width: 14px; height: 14px; }
+
+  /* ─── Footer ─── */
+  .footer {
+    background: var(--paper);
+    border-top: 1px solid var(--line);
+    padding: 24px 32px;
+    text-align: center;
+    font-size: 12.5px;
+    color: var(--ink-3);
+  }
+
+  /* ─── Modal overlay (re-used from v13) ─── */
+  .v9-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 1000;
+    display: none;
+    align-items: stretch;
+    justify-content: stretch;
+    padding: 0;
+    animation: v9-fade .2s ease both;
+  }
+  .v9-overlay.is-open { display: flex; }
+  @keyframes v9-fade { from { opacity: 0; } to { opacity: 1; } }
+  .v9-frame-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    background: transparent;
+    border-radius: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .v9-screen {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .v9-frame {
+    flex: 1;
+    width: 100%;
+    border: 0; display: block;
+    background: transparent;
+    min-height: 0;
+  }
+  .v9-close {
+    position: absolute;
+    top: 12px; right: 12px;
+    width: 36px; height: 36px;
+    background: rgba(255,255,255,0.95);
+    border: 0;
+    border-radius: 999px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    z-index: 2;
+    color: var(--ink);
+    transition: transform 0.15s;
+  }
+  .v9-close:hover { transform: scale(1.08); }
+  .v9-overlay--bare .v9-close { display: none; }
+
+  /* ─── Mobile preview mode — phone-mockup container ─── */
+  .v9-overlay--mobile {
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+  }
+  .v9-overlay--mobile .v9-frame-wrap {
+    width: 390px;
+    max-width: 100%;
+    height: min(844px, 100%);
+    background: #0d0a08;
+    border-radius: 44px;
+    padding: 12px;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.06) inset,
+      0 30px 80px -20px rgba(0,0,0,0.55);
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  /* Inner screen — hosts Chrome chrome + iframe */
+  .v9-overlay--mobile .v9-screen {
+    flex: 1;
+    border-radius: 32px;
+    background: #fff;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .v9-overlay--mobile .v9-frame {
+    flex: 1;
+    border-radius: 0;
+    background: #fff;
+    overflow: hidden;
+  }
+  /* ── Chrome on Android — status bar + URL bar mock ── */
+  .browser-chrome { display: none; }
+  .v9-overlay--mobile .browser-chrome {
+    display: block;
+    background: #f1f3f4;
+    color: #202124;
+    font-family: 'Roboto', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    flex-shrink: 0;
+  }
+  .browser-chrome__status {
+    height: 28px;
+    padding: 6px 22px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .browser-chrome__status-time { letter-spacing: 0.01em; }
+  .browser-chrome__status-icons {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #202124;
+  }
+  .browser-chrome__status-icons svg { width: 14px; height: 14px; }
+  .browser-chrome__bar {
+    height: 48px;
+    padding: 6px 8px 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .browser-chrome__btn {
+    width: 36px; height: 36px;
+    flex-shrink: 0;
+    display: grid; place-items: center;
+    border-radius: 999px;
+    color: #5f6368;
+  }
+  .browser-chrome__btn svg { width: 20px; height: 20px; }
+  .browser-chrome__url {
+    flex: 1;
+    min-width: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 12px;
+    height: 36px;
+    background: #fff;
+    border-radius: 999px;
+    border: 1px solid #dadce0;
+    font-size: 13.5px;
+    color: #202124;
+  }
+  .browser-chrome__url svg { width: 14px; height: 14px; flex-shrink: 0; color: #5f6368; }
+  .browser-chrome__url-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+    min-width: 0;
+  }
+  .browser-chrome__url-text strong { color: #202124; font-weight: 500; }
+  .browser-chrome__url-text span  { color: #5f6368; }
+  /* In mobile preview the funnel renders its own close inside its nav,
+     so the host modal's close is hidden to avoid two buttons stacking. */
+  .v9-overlay--mobile .v9-close { display: none; }
+  @media (max-width: 460px) {
+    .v9-overlay--mobile { padding: 0; }
+    .v9-overlay--mobile .v9-frame-wrap {
+      width: 100%; height: 100%;
+      border-radius: 0; padding: 0;
+    }
+    .v9-overlay--mobile .v9-screen { border-radius: 0; }
+    /* No bezel padding — chrome height (28+48) + 8px inset = 84px */
+    .v9-overlay--mobile .v9-close { top: 84px; right: 8px; }
+  }
+
+  @media (max-width: 880px) {
+    .sections { grid-template-columns: 1fr; gap: 20px; padding: 0 20px 64px; }
+    .section { padding: 24px 22px; }
+    .intro { padding: 56px 20px 32px; }
+  }
+</style>
+</head>
+<body>
+
+<section class="intro">
+  <div class="intro__text">
+    <h1>Funnel variants</h1>
+    <p class="lead">Each card opens a variant of the corresponding funnel. The description explains what changes compared to the standard variant. All cards currently open the same funnel — variant logic will be wired up one at a time.</p>
+  </div>
+
+  <div class="preview-toggle" role="group" aria-label="Preview mode">
+    <span class="preview-toggle__label">Preview as</span>
+    <button type="button" id="modeDesktop" class="is-active" onclick="setPreviewMode('desktop')" aria-pressed="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+        <rect x="3" y="4" width="18" height="13" rx="2"/>
+        <path d="M8 21h8M12 17v4"/>
+      </svg>
+      Desktop
+    </button>
+    <button type="button" id="modeMobile" onclick="setPreviewMode('mobile')" aria-pressed="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+        <rect x="6" y="2" width="12" height="20" rx="2.5"/>
+        <path d="M11 18h2"/>
+      </svg>
+      Mobile
+    </button>
+  </div>
+</section>
+
+<div class="sections">
+
+  <!-- ─── Booking funnel ─── -->
+  <div class="section">
+    <div class="section__head">
+      <h2 class="section__title">Terminfinder</h2>
+      <p class="section__sub">Booking funnel: studio, consultation type, date, contact.</p>
+    </div>
+
+    <div class="variants">
+      <article class="variant">
+        <div class="variant__head">
+          <h3 class="variant__name">Standard</h3>
+          <span class="variant__id">Variant A</span>
+        </div>
+        <p class="variant__desc">Four steps in fixed order — studio → consultation type → date → contact. Baseline for comparison.</p>
+        <button type="button" class="variant__btn" onclick="openTermin('A')">
+          Open variant
+          <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </article>
+
+      <article class="variant">
+        <div class="variant__head">
+          <h3 class="variant__name">With search bar</h3>
+          <span class="variant__id">Variant B</span>
+        </div>
+        <p class="variant__desc">Shows the studio search bar above the list and the full 9-studio catalogue.</p>
+        <button type="button" class="variant__btn" onclick="openTermin('B')">
+          Open variant
+          <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </article>
+
+      <article class="variant">
+        <div class="variant__head">
+          <h3 class="variant__name">Sticky CTA</h3>
+          <span class="variant__id">Variant C</span>
+        </div>
+        <p class="variant__desc">Pins the form's submit button to the bottom of the viewport on mobile, so it's always visible while the user types.</p>
+        <button type="button" class="variant__btn" onclick="openTermin('C')">
+          Open variant
+          <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </article>
+    </div>
+  </div>
+
+  <!-- ─── Configurator ─── -->
+  <div class="section">
+    <div class="section__head">
+      <h2 class="section__title">Funnel</h2>
+      <p class="section__sub">Configurator: shape, location, timing, budget, contact.</p>
+    </div>
+
+    <div class="variants">
+      <article class="variant">
+        <div class="variant__head">
+          <h3 class="variant__name">Full</h3>
+          <span class="variant__id">Variant A</span>
+        </div>
+        <p class="variant__desc">Five steps with every question in the standard order. Baseline for comparison.</p>
+        <button type="button" class="variant__btn" onclick="openTraum('A')">
+          Open variant
+          <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </article>
+
+      <article class="variant">
+        <div class="variant__head">
+          <h3 class="variant__name">No trust bar</h3>
+          <span class="variant__id">Variant B</span>
+        </div>
+        <p class="variant__desc">Removes the dark rating strip at the top of the funnel (Google rating + reviews). Tests whether the social-proof header helps or distracts.</p>
+        <button type="button" class="variant__btn" onclick="openTraum('B')">
+          Open variant
+          <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </article>
+
+      <article class="variant">
+        <div class="variant__head">
+          <h3 class="variant__name">Compact</h3>
+          <span class="variant__id">Variant C</span>
+        </div>
+        <p class="variant__desc">Three steps instead of five — style questions are dropped, going straight to shape, budget and contact. Fastest path to an offer.</p>
+        <button type="button" class="variant__btn" onclick="openTraum('C')">
+          Open variant
+          <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </article>
+    </div>
+  </div>
+
+</div>
+<!-- v9 / v8 funnel overlays -->
+<div class="v9-overlay" id="v9Overlay" role="dialog" aria-modal="true" aria-label="Funnel">
+  <div class="v9-frame-wrap">
+    <button class="v9-close" aria-label="Schließen" onclick="closeFunnel()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6l-12 12"/></svg>
+    </button>
+    <div class="v9-screen">
+      <div class="browser-chrome" aria-hidden="true">
+        <div class="browser-chrome__status">
+          <span class="browser-chrome__status-time">9:41</span>
+          <span class="browser-chrome__status-icons">
+            <!-- signal -->
+            <svg viewBox="0 0 14 14" fill="currentColor"><rect x="1" y="9" width="2" height="3" rx="0.4"/><rect x="4" y="7" width="2" height="5" rx="0.4"/><rect x="7" y="5" width="2" height="7" rx="0.4"/><rect x="10" y="3" width="2" height="9" rx="0.4"/></svg>
+            <!-- wifi -->
+            <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M1.5 5.5C3 4 5 3 7 3s4 1 5.5 2.5"/><path d="M3.5 7.5C4.5 6.5 5.7 6 7 6s2.5 0.5 3.5 1.5"/><circle cx="7" cy="10" r="0.9" fill="currentColor" stroke="none"/></svg>
+            <!-- battery -->
+            <svg viewBox="0 0 22 14" fill="none" stroke="currentColor" stroke-width="1"><rect x="1" y="3" width="17" height="8" rx="1.6"/><rect x="3" y="5" width="11" height="4" rx="0.6" fill="currentColor" stroke="none"/><rect x="19" y="5" width="2" height="4" rx="0.6" fill="currentColor" stroke="none"/></svg>
+          </span>
+        </div>
+        <div class="browser-chrome__bar">
+          <span class="browser-chrome__btn" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+          </span>
+          <span class="browser-chrome__url">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+            <span class="browser-chrome__url-text"><strong>biller-kuechen.de</strong><span> / funnel</span></span>
+          </span>
+          <span class="browser-chrome__btn" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="6" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="18" r="1.6"/></svg>
+          </span>
+        </div>
+      </div>
+      <iframe class="v9-frame" id="v9Frame" title="Funnel"></iframe>
+    </div>
+  </div>
+</div>
+
+<script>
+  var overlay = document.getElementById('v9Overlay');
+  var frame = document.getElementById('v9Frame');
+  var previewMode = 'desktop';   // 'desktop' | 'mobile'
+
+  window.setPreviewMode = function(mode) {
+    previewMode = mode;
+    document.getElementById('modeDesktop').classList.toggle('is-active', mode === 'desktop');
+    document.getElementById('modeMobile').classList.toggle('is-active', mode === 'mobile');
+    document.getElementById('modeDesktop').setAttribute('aria-pressed', mode === 'desktop');
+    document.getElementById('modeMobile').setAttribute('aria-pressed', mode === 'mobile');
+  };
+
+  function openFunnel(src, bare) {
+    frame.src = src;
+    overlay.classList.toggle('v9-overlay--bare', !!bare);
+    overlay.classList.toggle('v9-overlay--mobile', previewMode === 'mobile');
+    overlay.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeFunnel() {
+    overlay.classList.remove('is-open');
+    overlay.classList.remove('v9-overlay--mobile');
+    document.body.style.overflow = '';
+    setTimeout(function(){ frame.src = 'about:blank'; }, 200);
+  }
+  // All variants currently open the same funnel — variant param is appended
+  // to the URL so we can wire up real differences later inside each funnel.
+  window.openTermin = function(variant) {
+    openFunnel('./funnel-termin.html?variant=' + encodeURIComponent(variant), true);
+  };
+  window.openTraum = function(variant) {
+    openFunnel('./funnel-traumkuche.html?standalone=1&variant=' + encodeURIComponent(variant), false);
+  };
+
+  overlay.addEventListener('click', function(e) {
+    if (e.target === overlay) closeFunnel();
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && overlay.classList.contains('is-open')) closeFunnel();
+  });
+  window.addEventListener('message', function(e) {
+    if (e && e.data && e.data.type === 'funnel:close') closeFunnel();
+  });
+</script>
+
+</body>
+</html>

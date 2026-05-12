@@ -55,6 +55,14 @@
     /* When embedded inside another page (v10 modal), let the parent handle the
        backdrop — drop our own dim layer so the modal sits cleanly on the host. */
     html.embedded, html.embedded body, html.embedded #root { height: 100%; overflow: hidden; margin: 0; }
+    /* Standalone-iframed: keep the centered-card layout but drop our own
+       backdrop so the host's overlay shows through. */
+    html.iframed-standalone, html.iframed-standalone body, html.iframed-standalone #root { margin: 0; background: transparent !important; }
+    html.iframed-standalone .page {
+      background: transparent;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
     .embedded .page {
       padding: 0;
       background: transparent;
@@ -541,7 +549,18 @@
   </style>
 </head>
 <body>
-  <script>if (window.top !== window.self) document.documentElement.classList.add('embedded');</script>
+  <script>
+    // Auto-apply embedded styling when iframed. ?standalone=1 keeps the
+    // centered-card layout but drops our own dim backdrop so the host's
+    // overlay shows through cleanly.
+    if (window.top !== window.self) {
+      if (/[?&]standalone=1\b/.test(location.search)) {
+        document.documentElement.classList.add('iframed-standalone');
+      } else {
+        document.documentElement.classList.add('embedded');
+      }
+    }
+  </script>
   <div id="root"></div>
 
   <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>

@@ -8,3 +8,9 @@ unpack.py
 **/_source.html
 v11/source.html
 v11/Küchenmesse entdecken _ MÖBEL MARTIN_files/
+
+# Local backups created during refactors
+**/*.bak
+**/*.bak/
+**/glyphs.bak/
+**/before-normalize.bak/
