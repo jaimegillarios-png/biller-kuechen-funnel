@@ -49,44 +49,6 @@
   .intro__text { max-width: 680px; flex: 1 1 auto; min-width: 280px; }
 
   /* ─── Preview-mode toggle (Desktop / Mobile) ─── */
-  .preview-toggle {
-    display: inline-flex;
-    align-items: center;
-    background: var(--paper);
-    border: 1px solid var(--line);
-    border-radius: 999px;
-    padding: 4px;
-    gap: 2px;
-    flex-shrink: 0;
-  }
-  .preview-toggle__label {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--ink-3);
-    padding: 0 12px 0 8px;
-  }
-  .preview-toggle button {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 7px 14px;
-    border: 0;
-    background: transparent;
-    color: var(--ink-3);
-    font-size: 13px;
-    font-weight: 500;
-    border-radius: 999px;
-    cursor: pointer;
-    transition: background 0.15s, color 0.15s;
-  }
-  .preview-toggle button:hover { color: var(--ink); }
-  .preview-toggle button.is-active {
-    background: var(--ink);
-    color: #fff;
-  }
-  .preview-toggle button svg { width: 14px; height: 14px; }
   .intro p.eyebrow {
     font-size: 11px;
     font-weight: 600;
@@ -262,13 +224,6 @@
     display: flex;
     flex-direction: column;
   }
-  .v9-screen {
-    flex: 1;
-    min-height: 0;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
   .v9-frame {
     flex: 1;
     width: 100%;
@@ -295,127 +250,17 @@
   .v9-overlay--bare .v9-close { display: none; }
 
   /* ─── Mobile preview mode — phone-mockup container ─── */
-  .v9-overlay--mobile {
-    align-items: center;
-    justify-content: center;
-    padding: 32px 16px;
-  }
-  .v9-overlay--mobile .v9-frame-wrap {
-    width: 390px;
-    max-width: 100%;
-    height: min(844px, 100%);
-    background: #0d0a08;
-    border-radius: 44px;
-    padding: 12px;
-    box-shadow:
-      0 0 0 1px rgba(255,255,255,0.06) inset,
-      0 30px 80px -20px rgba(0,0,0,0.55);
-    overflow: hidden;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    /* Slide up from the bottom — sheet feel */
-    animation: v9-slide-up .32s cubic-bezier(.16, 1, .3, 1) both;
-    will-change: transform;
-    backface-visibility: hidden;
-  }
   /* Inner screen — hosts Chrome chrome + iframe */
-  .v9-overlay--mobile .v9-screen {
-    flex: 1;
-    border-radius: 32px;
-    background: #fff;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-  }
-  .v9-overlay--mobile .v9-frame {
-    flex: 1;
-    border-radius: 0;
-    background: #fff;
-    overflow: hidden;
-  }
   /* ── Chrome on Android — status bar + URL bar mock ── */
-  .browser-chrome { display: none; }
-  .v9-overlay--mobile .browser-chrome {
-    display: block;
-    background: #f1f3f4;
-    color: #202124;
-    font-family: 'Roboto', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    flex-shrink: 0;
-  }
-  .browser-chrome__status {
-    height: 28px;
-    padding: 6px 22px 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 13px;
-    font-weight: 600;
-  }
-  .browser-chrome__status-time { letter-spacing: 0.01em; }
-  .browser-chrome__status-icons {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    color: #202124;
-  }
-  .browser-chrome__status-icons svg { width: 14px; height: 14px; }
-  .browser-chrome__bar {
-    height: 48px;
-    padding: 6px 8px 8px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .browser-chrome__btn {
-    width: 36px; height: 36px;
-    flex-shrink: 0;
-    display: grid; place-items: center;
-    border-radius: 999px;
-    color: #5f6368;
-  }
-  .browser-chrome__btn svg { width: 20px; height: 20px; }
-  .browser-chrome__url {
-    flex: 1;
-    min-width: 0;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 0 12px;
-    height: 36px;
-    background: #fff;
-    border-radius: 999px;
-    border: 1px solid #dadce0;
-    font-size: 13.5px;
-    color: #202124;
-  }
-  .browser-chrome__url svg { width: 14px; height: 14px; flex-shrink: 0; color: #5f6368; }
-  .browser-chrome__url-text {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    flex: 1;
-    min-width: 0;
-  }
-  .browser-chrome__url-text strong { color: #202124; font-weight: 500; }
-  .browser-chrome__url-text span  { color: #5f6368; }
   /* In mobile preview the funnel renders its own close inside its nav,
      so the host modal's close is hidden to avoid two buttons stacking. */
-  .v9-overlay--mobile .v9-close { display: none; }
   /* Same applies on any small viewport regardless of preview-mode flag —
      the funnel always shows its in-nav close under 880px wide. */
   @media (max-width: 880px) {
     .v9-close { display: none; }
   }
   @media (max-width: 460px) {
-    .v9-overlay--mobile { padding: 0; }
-    .v9-overlay--mobile .v9-frame-wrap {
-      width: 100%; height: 100%;
-      border-radius: 0; padding: 0;
-    }
-    .v9-overlay--mobile .v9-screen { border-radius: 0; }
     /* No bezel padding — chrome height (28+48) + 8px inset = 84px */
-    .v9-overlay--mobile .v9-close { top: 84px; right: 8px; }
   }
 
   @media (max-width: 880px) {
@@ -426,7 +271,6 @@
   /* Hide the preview toggle only on actual touch devices — a desktop
      browser with a resized window should keep the toggle. */
   @media (max-width: 880px) and (pointer: coarse) {
-    .preview-toggle { display: none; }
   }
 
   /* Real small viewports — funnel modal slides up like a native sheet
@@ -440,16 +284,11 @@
     /* Force the wrap + iframe to fill the full mobile viewport (incl.
        under iOS Safari's URL bar). Avoids a white gap at the bottom
        when the flex chain doesn't propagate dvh height correctly. */
-    .v9-frame-wrap, .v9-screen, .v9-frame {
-      height: 100vh;
-      height: 100dvh;
-    }
   }
   /* Respect reduced-motion preference */
   @media (prefers-reduced-motion: reduce) {
     .v9-overlay,
     .v9-frame-wrap,
-    .v9-overlay--mobile .v9-frame-wrap { animation: none; }
   }
 </style>
 </head>
@@ -461,23 +300,6 @@
     <p class="lead">Each card opens a variant of the corresponding funnel. The description explains what changes compared to the standard variant.</p>
   </div>
 
-  <div class="preview-toggle" role="group" aria-label="Preview mode">
-    <span class="preview-toggle__label">Preview as</span>
-    <button type="button" id="modeDesktop" class="is-active" onclick="setPreviewMode('desktop')" aria-pressed="true">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
-        <rect x="3" y="4" width="18" height="13" rx="2"/>
-        <path d="M8 21h8M12 17v4"/>
-      </svg>
-      Desktop
-    </button>
-    <button type="button" id="modeMobile" onclick="setPreviewMode('mobile')" aria-pressed="false">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
-        <rect x="6" y="2" width="12" height="20" rx="2.5"/>
-        <path d="M11 18h2"/>
-      </svg>
-      Mobile
-    </button>
-  </div>
 </section>
 
 <div class="sections">
@@ -581,64 +403,22 @@
     <button class="v9-close" aria-label="Schließen" onclick="closeFunnel()">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6l-12 12"/></svg>
     </button>
-    <div class="v9-screen">
-      <div class="browser-chrome" aria-hidden="true">
-        <div class="browser-chrome__status">
-          <span class="browser-chrome__status-time">9:41</span>
-          <span class="browser-chrome__status-icons">
-            <!-- signal -->
-            <svg viewBox="0 0 14 14" fill="currentColor"><rect x="1" y="9" width="2" height="3" rx="0.4"/><rect x="4" y="7" width="2" height="5" rx="0.4"/><rect x="7" y="5" width="2" height="7" rx="0.4"/><rect x="10" y="3" width="2" height="9" rx="0.4"/></svg>
-            <!-- wifi -->
-            <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M1.5 5.5C3 4 5 3 7 3s4 1 5.5 2.5"/><path d="M3.5 7.5C4.5 6.5 5.7 6 7 6s2.5 0.5 3.5 1.5"/><circle cx="7" cy="10" r="0.9" fill="currentColor" stroke="none"/></svg>
-            <!-- battery -->
-            <svg viewBox="0 0 22 14" fill="none" stroke="currentColor" stroke-width="1"><rect x="1" y="3" width="17" height="8" rx="1.6"/><rect x="3" y="5" width="11" height="4" rx="0.6" fill="currentColor" stroke="none"/><rect x="19" y="5" width="2" height="4" rx="0.6" fill="currentColor" stroke="none"/></svg>
-          </span>
-        </div>
-        <div class="browser-chrome__bar">
-          <span class="browser-chrome__btn" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
-          </span>
-          <span class="browser-chrome__url">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
-            <span class="browser-chrome__url-text"><strong>biller-kuechen.de</strong><span> / funnel</span></span>
-          </span>
-          <span class="browser-chrome__btn" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="6" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="18" r="1.6"/></svg>
-          </span>
-        </div>
-      </div>
-      <iframe class="v9-frame" id="v9Frame" title="Funnel"></iframe>
-    </div>
+    <iframe class="v9-frame" id="v9Frame" title="Funnel"></iframe>
   </div>
 </div>
 
 <script>
   var overlay = document.getElementById('v9Overlay');
   var frame = document.getElementById('v9Frame');
-  // Default to mobile only when the device is actually a phone:
-  // small viewport AND coarse pointer (touch). A desktop browser with
-  // a narrow window keeps the desktop default + the toggle.
-  var previewMode = window.matchMedia('(max-width: 880px) and (pointer: coarse)').matches
-    ? 'mobile' : 'desktop';
-
-  window.setPreviewMode = function(mode) {
-    previewMode = mode;
-    document.getElementById('modeDesktop').classList.toggle('is-active', mode === 'desktop');
-    document.getElementById('modeMobile').classList.toggle('is-active', mode === 'mobile');
-    document.getElementById('modeDesktop').setAttribute('aria-pressed', mode === 'desktop');
-    document.getElementById('modeMobile').setAttribute('aria-pressed', mode === 'mobile');
-  };
 
   function openFunnel(src, bare) {
     frame.src = src;
     overlay.classList.toggle('v9-overlay--bare', !!bare);
-    overlay.classList.toggle('v9-overlay--mobile', previewMode === 'mobile');
     overlay.classList.add('is-open');
     document.body.style.overflow = 'hidden';
   }
   function closeFunnel() {
     overlay.classList.remove('is-open');
-    overlay.classList.remove('v9-overlay--mobile');
     document.body.style.overflow = '';
     setTimeout(function(){ frame.src = 'about:blank'; }, 200);
   }
