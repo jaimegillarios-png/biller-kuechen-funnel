@@ -412,6 +412,9 @@
     .sections { grid-template-columns: 1fr; gap: 20px; padding: 0 20px 64px; }
     .section { padding: 24px 22px; }
     .intro { padding: 56px 20px 32px; }
+    /* No need for the preview toggle on real mobile — they're already
+       on a phone, the funnel opens in mobile mode by default. */
+    .preview-toggle { display: none; }
   }
 
   /* Real small viewports — funnel modal slides up like a native sheet
@@ -436,7 +439,7 @@
 <section class="intro">
   <div class="intro__text">
     <h1>Funnel variants</h1>
-    <p class="lead">Each card opens a variant of the corresponding funnel. The description explains what changes compared to the standard variant. All cards currently open the same funnel — variant logic will be wired up one at a time.</p>
+    <p class="lead">Each card opens a variant of the corresponding funnel. The description explains what changes compared to the standard variant.</p>
   </div>
 
   <div class="preview-toggle" role="group" aria-label="Preview mode">

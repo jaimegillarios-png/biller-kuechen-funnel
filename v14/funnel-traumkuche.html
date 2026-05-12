@@ -565,7 +565,11 @@
       .nav { padding: 4px 0 10px; }
       /* Swap step counter for the close button in the nav */
       .nav .step-counter { display: none; }
-      .nav .nav-close { display: inline-flex; }
+      .nav .nav-close { display: inline-flex; width: 40px; height: 40px; }
+      .nav .nav-close svg { width: 18px; height: 18px; }
+      /* Bigger back-button touch target on mobile */
+      .nav .back-btn { font-size: 15px; padding: 10px 14px; gap: 8px; }
+      .nav .back-btn svg { width: 20px; height: 20px; }
       /* Step counter becomes a fixed pill anchored bottom-right */
       .step-pill {
         display: inline-block;
