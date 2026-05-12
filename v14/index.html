@@ -232,6 +232,11 @@
   /* ─── Modal overlay (re-used from v13) ─── */
   .v9-overlay {
     position: fixed; inset: 0;
+    /* Use dynamic viewport height so the modal fills under iOS Safari's
+       URL bar instead of leaving a gap at the bottom. */
+    height: 100vh;
+    height: 100dvh;
+    width: 100vw;
     background: rgba(0,0,0,0.55);
     z-index: 1000;
     display: none;
@@ -397,6 +402,11 @@
   /* In mobile preview the funnel renders its own close inside its nav,
      so the host modal's close is hidden to avoid two buttons stacking. */
   .v9-overlay--mobile .v9-close { display: none; }
+  /* Same applies on any small viewport regardless of preview-mode flag —
+     the funnel always shows its in-nav close under 880px wide. */
+  @media (max-width: 880px) {
+    .v9-close { display: none; }
+  }
   @media (max-width: 460px) {
     .v9-overlay--mobile { padding: 0; }
     .v9-overlay--mobile .v9-frame-wrap {
@@ -412,8 +422,10 @@
     .sections { grid-template-columns: 1fr; gap: 20px; padding: 0 20px 64px; }
     .section { padding: 24px 22px; }
     .intro { padding: 56px 20px 32px; }
-    /* No need for the preview toggle on real mobile — they're already
-       on a phone, the funnel opens in mobile mode by default. */
+  }
+  /* Hide the preview toggle only on actual touch devices — a desktop
+     browser with a resized window should keep the toggle. */
+  @media (max-width: 880px) and (pointer: coarse) {
     .preview-toggle { display: none; }
   }
 
@@ -424,6 +436,13 @@
       animation: v9-slide-up .32s cubic-bezier(.16, 1, .3, 1) both;
       will-change: transform;
       backface-visibility: hidden;
+    }
+    /* Force the wrap + iframe to fill the full mobile viewport (incl.
+       under iOS Safari's URL bar). Avoids a white gap at the bottom
+       when the flex chain doesn't propagate dvh height correctly. */
+    .v9-frame-wrap, .v9-screen, .v9-frame {
+      height: 100vh;
+      height: 100dvh;
     }
   }
   /* Respect reduced-motion preference */
@@ -596,7 +615,11 @@
 <script>
   var overlay = document.getElementById('v9Overlay');
   var frame = document.getElementById('v9Frame');
-  var previewMode = 'desktop';   // 'desktop' | 'mobile'
+  // Default to mobile only when the device is actually a phone:
+  // small viewport AND coarse pointer (touch). A desktop browser with
+  // a narrow window keeps the desktop default + the toggle.
+  var previewMode = window.matchMedia('(max-width: 880px) and (pointer: coarse)').matches
+    ? 'mobile' : 'desktop';
 
   window.setPreviewMode = function(mode) {
     previewMode = mode;
