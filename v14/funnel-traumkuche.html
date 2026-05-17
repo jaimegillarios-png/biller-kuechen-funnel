@@ -114,7 +114,7 @@
       position: relative;
     }
     .card-body {
-      padding: 10px 36px 32px;
+      padding: 10px 36px 36px;
       min-height: 600px;
       display: flex; flex-direction: column;
     }
@@ -126,6 +126,9 @@
     @media (max-width: 880px) {
       html.variant-B .card-body { padding: 24px; }
     }
+    /* variant=C → "Compact": very light grey body so the white option
+       cards stand out more clearly against the background. */
+    html.variant-C .card-body { background: #F8F8F9; }
     .review-bar {
       width: 100%;
       background: #3F141E;
@@ -229,7 +232,7 @@
     /* progress */
     .progress {
       position: relative; width: 100%; height: 2px;
-      margin-bottom: 20px; border-radius: 2px; overflow: hidden;
+      margin-bottom: 32px; border-radius: 2px; overflow: hidden;
     }
     .progress-track { position: absolute; inset: 0; background: var(--line); }
     .progress-fill {
@@ -243,17 +246,27 @@
     .step-content { flex: 1; display: flex; flex-direction: column; animation: fadeUp 320ms cubic-bezier(.2,.7,.2,1); }
     @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-    .header { margin-bottom: 20px; text-align: center; }
+    .header { margin-bottom: 32px; text-align: center; }
     .title {
       font-family: 'Inter', sans-serif;
       font-weight: 500; font-size: 24px; line-height: 1.18;
-      letter-spacing: -0.02em; margin: 0 0 8px;
+      letter-spacing: -0.02em; margin: 0 0 14px;
       color: var(--ink); text-wrap: balance;
     }
     .subtitle { margin: 0; font-size: 14px; color: var(--ink-3); text-wrap: pretty; }
 
     /* grid */
-    .grid { display: grid; gap: 12px; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); }
+    /* Grid fills the remaining vertical space inside the card so 1-row
+       slides keep the same container height as 2-row slides. Cards stay
+       at their natural top-aligned position (align-content: start). */
+    .grid {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+      flex: 1 1 auto;
+      align-content: start;
+      min-height: 0;
+    }
     .grid-cols-2 { --cols: 2; max-width: 600px; margin: 0 auto; width: 100%; }
     .grid-cols-3 { --cols: 3; }
     .grid-cols-4 { --cols: 4; }
@@ -569,7 +582,7 @@
         box-shadow: none;
         max-width: none;
       }
-      .card-body { padding: 12px 16px 20px; min-height: calc(100vh - 60px); }
+      .card-body { padding: 12px 16px 16px; min-height: calc(100vh - 60px); }
       .nav { padding: 4px 0 10px; }
       /* Swap step counter for the close button in the nav */
       .nav .step-counter { display: none; }
@@ -597,9 +610,9 @@
         z-index: 60;
         pointer-events: none;
       }
-      .progress { margin-bottom: 24px; }
-      .header { margin-bottom: 24px; }
-      .title { margin-bottom: 8px; }
+      .progress { margin-bottom: 32px; }
+      .header { margin-bottom: 36px; }
+      .title { margin-bottom: 14px; }
       .grid { gap: 10px; }
       .fallback { margin-top: 12px; }
       .reassure {
