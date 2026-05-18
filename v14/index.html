@@ -284,11 +284,17 @@
     /* Force the wrap + iframe to fill the full mobile viewport (incl.
        under iOS Safari's URL bar). Avoids a white gap at the bottom
        when the flex chain doesn't propagate dvh height correctly. */
+    .v9-frame-wrap, .v9-frame {
+      height: 100vh;
+      height: 100dvh;
+    }
   }
   /* Respect reduced-motion preference */
   @media (prefers-reduced-motion: reduce) {
     .v9-overlay,
-    .v9-frame-wrap,
+    .v9-frame-wrap {
+      animation: none;
+    }
   }
 </style>
 </head>
@@ -384,10 +390,10 @@
 
       <article class="variant">
         <div class="variant__head">
-          <h3 class="variant__name">Compact</h3>
+          <h3 class="variant__name">Grey canvas</h3>
           <span class="variant__id">Variant C</span>
         </div>
-        <p class="variant__desc">Three steps instead of five — style questions are dropped, going straight to shape, budget and contact. Fastest path to an offer.</p>
+        <p class="variant__desc">Replaces the white card body with a very light grey so the white option cards stand out more against the background.</p>
         <button type="button" class="variant__btn" onclick="openTraum('C')">
           Open variant
           <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>

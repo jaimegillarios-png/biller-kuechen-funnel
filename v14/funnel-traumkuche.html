@@ -256,16 +256,10 @@
     .subtitle { margin: 0; font-size: 14px; color: var(--ink-3); text-wrap: pretty; }
 
     /* grid */
-    /* Grid fills the remaining vertical space inside the card so 1-row
-       slides keep the same container height as 2-row slides. Cards stay
-       at their natural top-aligned position (align-content: start). */
     .grid {
       display: grid;
       gap: 12px;
       grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
-      flex: 1 1 auto;
-      align-content: start;
-      min-height: 0;
     }
     .grid-cols-2 { --cols: 2; max-width: 600px; margin: 0 auto; width: 100%; }
     .grid-cols-3 { --cols: 3; }
