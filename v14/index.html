@@ -72,6 +72,24 @@
     color: var(--ink-2);
     margin: 0;
   }
+  .intro__download {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-top: 18px;
+    padding: 9px 14px;
+    border-radius: 999px;
+    background: var(--paper, #fff);
+    border: 1px solid rgba(15,17,16,0.10);
+    color: var(--ink, #15171A);
+    font-size: 13px; font-weight: 500;
+    letter-spacing: -0.005em;
+    text-decoration: none;
+    transition: border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+  }
+  .intro__download:hover {
+    border-color: rgba(15,17,16,0.22);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px -6px rgba(15,17,16,0.18);
+  }
 
   /* ─── Variant sections ─── */
   .sections {
@@ -361,16 +379,34 @@
     <div class="section__head">
       <h2 class="section__title">Funnel</h2>
       <p class="section__sub">Configurator: shape, location, timing, budget, contact.</p>
+      <a class="intro__download" href="./assets/funnel-icons.zip" download>
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M8 2v8M4.5 6.5L8 10l3.5-3.5M3 13h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Download funnel icons (.zip)
+      </a>
     </div>
 
     <div class="variants">
       <article class="variant">
         <div class="variant__head">
-          <h3 class="variant__name">Modern / Whitelabelled</h3>
+          <h3 class="variant__name">Modern + CRO</h3>
           <span class="variant__id">Variant A</span>
         </div>
-        <p class="variant__desc">Product-designer pass: hairline borders, monochrome trust bar, sharper typography, segmented progress, gradient CTA. Same flow and icons.</p>
-        <button type="button" class="variant__btn" onclick="openTraum('E')">
+        <p class="variant__desc">Modern design plus research-backed conversion tweaks: "Beliebt" badge on the most-chosen option per step (anchoring + social proof), reassurance microcopy under the email field (Baymard), endowed-progress effect, consultant card, inline validation, slide transitions, and selection microreward.</p>
+        <button type="button" class="variant__btn" onclick="openTraum('F')">
+          Open variant
+          <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </article>
+
+      <article class="variant">
+        <div class="variant__head">
+          <h3 class="variant__name">Intro splash</h3>
+          <span class="variant__id">Variant B</span>
+        </div>
+        <p class="variant__desc">Variant A plus a 4.3-second intro splash on open — rotating USPs with a loading bar, then slides out to the left to reveal the funnel.</p>
+        <button type="button" class="variant__btn" onclick="openTraum('G')">
           Open variant
           <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
@@ -379,25 +415,13 @@
       <article class="variant">
         <div class="variant__head">
           <h3 class="variant__name">Inline</h3>
-          <span class="variant__id">Variant B</span>
+          <span class="variant__id">Variant C</span>
         </div>
         <p class="variant__desc">Whitelabel landing page (v16) with the Modern funnel embedded inline below the hero — no modal, the funnel sits directly in the page flow.</p>
         <a class="variant__btn" href="../v16/index.html" target="_blank" rel="noopener">
           Open variant
           <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
-      </article>
-
-      <article class="variant">
-        <div class="variant__head">
-          <h3 class="variant__name">Full</h3>
-          <span class="variant__id">Variant C</span>
-        </div>
-        <p class="variant__desc">Five steps with every question in the standard order. Baseline for comparison.</p>
-        <button type="button" class="variant__btn" onclick="openTraum('A')">
-          Open variant
-          <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
       </article>
 
       <article class="variant">
@@ -423,6 +447,7 @@
           <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
       </article>
+
     </div>
   </div>
 

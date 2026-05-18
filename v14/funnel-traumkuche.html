@@ -131,6 +131,245 @@
     html.variant-C .card-body { background: #F8F8F9; }
 
     /* ─────────────────────────────────────────────────────────────
+       variant=G → 4-second white intro splash before the funnel.
+       Logo + animated dots + tagline. Slides up out of frame.
+       ───────────────────────────────────────────────────────────── */
+    .splash {
+      position: absolute; inset: 0;
+      z-index: 30;
+      background: #FFFFFF;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: inherit;
+      overflow: hidden;
+    }
+    .splash--visible { animation: vG-splash-in 420ms cubic-bezier(.2,.8,.2,1) both; }
+    .splash--leaving { animation: vG-splash-out 700ms cubic-bezier(.5, 0, .2, 1) both; }
+    @keyframes vG-splash-in {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes vG-splash-out {
+      from { transform: translateX(0);     opacity: 1; }
+      to   { transform: translateX(-100%); opacity: 1; }
+    }
+    .splash__stage {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 28px;
+      width: 100%;
+      max-width: 380px;
+      padding: 0 24px;
+    }
+    /* USP carousel — each USP re-mounts with React key change, sliding in
+       from the right while the old one's removal is instant (clean fade). */
+    .splash__usp {
+      display: flex; flex-direction: column; align-items: center; gap: 14px;
+      text-align: center;
+      animation: vG-usp-slide 1600ms cubic-bezier(.45, 0, .25, 1) both;
+      min-height: 100px;
+      justify-content: center;
+    }
+    @keyframes vG-usp-slide {
+      0%   { opacity: 0; transform: translateX(56px) scale(.985); }
+      22%  { opacity: 1; transform: translateX(0)    scale(1); }
+      62%  { opacity: 1; transform: translateX(0)    scale(1); }
+      100% { opacity: 0; transform: translateX(-56px) scale(.985); }
+    }
+    .splash__icon {
+      color: #1A1D1B;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .splash__label {
+      margin: 0;
+      font-size: 15px; font-weight: 500;
+      letter-spacing: -0.012em;
+      color: #1A1D1B;
+      line-height: 1.3;
+    }
+    /* Loading bar */
+    .splash__bar {
+      width: 100%;
+      max-width: 140px;
+      height: 3px;
+      border-radius: 999px;
+      background: rgba(15,17,16,0.08);
+      overflow: hidden;
+    }
+    .splash__bar-fill {
+      height: 100%; width: 0;
+      background: #1A1D1B;
+      border-radius: 999px;
+      animation: vG-bar 4300ms linear both;
+    }
+    @keyframes vG-bar {
+      from { width: 0; }
+      to   { width: 100%; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .splash--leaving, .splash__usp, .splash__bar-fill { animation: none !important; }
+    }
+
+
+    /* ─────────────────────────────────────────────────────────────
+       variant=F → CRO additions on top of Modern (variant-E):
+       "Beliebt" badge on the most-chosen option per step,
+       and a small reassurance hint under the email field.
+       The badge / hint nodes render in all variants but are hidden
+       by default; variant-F reveals them.
+       ───────────────────────────────────────────────────────────── */
+    .opt-badge { display: none; }
+    .field-hint { display: none; }
+    html.variant-F .opt-card { padding-top: 18px; }
+    html.variant-F .opt-badge {
+      display: inline-flex; align-items: center;
+      position: absolute; top: -9px; left: 50%;
+      transform: translateX(-50%);
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: #F5B400;
+      color: #5A3D00;
+      font-size: 10.5px; font-weight: 700;
+      letter-spacing: 0.04em; text-transform: uppercase;
+      box-shadow: 0 2px 6px -2px rgba(245,180,0,0.55);
+      white-space: nowrap;
+      z-index: 3;
+    }
+    html.variant-F .opt-card.is-popular {
+      border-color: rgba(245,180,0,0.45);
+    }
+    html.variant-F .opt-card.is-popular:hover {
+      border-color: rgba(245,180,0,0.70);
+    }
+    html.variant-F .field-hint {
+      display: block;
+      font-size: 11.5px;
+      color: rgba(26,29,27,0.55);
+      line-height: 1.35;
+      margin-top: 2px;
+    }
+
+    /* Time-left chip (variant-F only — visible by default hidden when no prop). */
+    .time-left { display: none; }
+    html.variant-F .time-left {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 10px;
+      margin: 0 auto 12px;
+      border-radius: 999px;
+      background: rgba(22,163,74,0.08);
+      border: 1px solid rgba(22,163,74,0.18);
+      color: #166534;
+      font-size: 11.5px; font-weight: 500;
+      font-variant-numeric: tabular-nums;
+    }
+    html.variant-F .header { display: flex; flex-direction: column; align-items: center; }
+
+    /* Consultant block above contact form */
+    .consultant { display: none; }
+    html.variant-F .consultant {
+      display: flex; align-items: center; justify-content: flex-start;
+      gap: 14px;
+      padding: 12px 16px;
+      border-radius: 14px;
+      background: linear-gradient(180deg, #FFFFFF, #FAFAF8);
+      border: 1px solid rgba(15,17,16,0.07);
+      box-shadow: 0 1px 0 rgba(255,255,255,0.6) inset,
+                  0 1px 2px rgba(15,17,16,0.03);
+      margin-top: -4px;
+      margin-bottom: 6px;
+    }
+    html.variant-F .consultant__avatar {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #F5B400, #E27A1F);
+      color: #FFFFFF;
+      font-size: 13px; font-weight: 700;
+      letter-spacing: 0.02em;
+      flex-shrink: 0;
+    }
+    html.variant-F .consultant__avatar--img {
+      width: 96px; height: auto;
+      border-radius: 0;
+      background: transparent;
+      object-fit: contain;
+      display: block;
+      flex-shrink: 0;
+    }
+    html.variant-F .consultant__meta {
+      display: flex; flex-direction: column; gap: 2px;
+      text-align: left;
+    }
+    html.variant-F .consultant__name {
+      font-size: 14px; font-weight: 600; color: #1A1D1B;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+    }
+    html.variant-F .consultant__role {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12.5px; color: rgba(26,29,27,0.62);
+      line-height: 1.3;
+    }
+    /* Tiny green status dot before the role for "available now" vibe */
+    html.variant-F .consultant__role::before {
+      content: "";
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #16A34A;
+      box-shadow: 0 0 0 2px rgba(22,163,74,0.18);
+      flex-shrink: 0;
+    }
+
+    /* Inline validation checkmarks (variant-F only) */
+    .valid-check { display: none; }
+    html.variant-F .input-wrap { position: relative; }
+    html.variant-F .field.is-valid .valid-check {
+      display: inline-flex; align-items: center; justify-content: center;
+      position: absolute; right: 12px; top: 50%;
+      transform: translateY(-50%);
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: #16A34A;
+      color: #FFFFFF;
+      animation: vF-check-pop 240ms cubic-bezier(.2,1.6,.4,1);
+    }
+    html.variant-F .field.is-valid .input { border-color: rgba(22,163,74,0.45); padding-right: 38px; }
+    @keyframes vF-check-pop {
+      from { transform: translateY(-50%) scale(.4); opacity: 0; }
+      to   { transform: translateY(-50%) scale(1);  opacity: 1; }
+    }
+
+    /* Microreward: subtle bounce — only on real selection, not back-nav. */
+    html.variant-F .opt-card.is-just-selected .opt-check {
+      animation: vF-check-bounce 520ms cubic-bezier(.34, 1.4, .64, 1) both;
+    }
+    @keyframes vF-check-bounce {
+      0%   { transform: scale(0);    opacity: 0; }
+      55%  { transform: scale(1.18); opacity: 1; }
+      80%  { transform: scale(.96); }
+      100% { transform: scale(1);    opacity: 1; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html.variant-F .opt-card.is-just-selected .opt-check { animation: none; }
+    }
+
+    /* Linger tooltip below email */
+    .linger-tip { display: none; }
+    html.variant-F .linger-tip {
+      display: block;
+      margin-top: 6px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      background: rgba(245,180,0,0.10);
+      border: 1px solid rgba(245,180,0,0.30);
+      color: #6B4A00;
+      font-size: 12px; line-height: 1.4;
+      animation: vF-fade-in 280ms ease-out;
+    }
+    @keyframes vF-fade-in {
+      from { opacity: 0; transform: translateY(-4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+
+    /* ─────────────────────────────────────────────────────────────
        variant=E → "Modern": a more refined, product-designer pass.
        Hairline borders, segmented progress, monochrome trust bar,
        sharper typography, gradient CTA. Same icons & flow.
@@ -268,6 +507,9 @@
         0 14px 32px -16px rgba(15,17,16,0.28);
     }
     html.variant-E .opt-glyph { background: transparent; border-radius: 12px; }
+    /* 2-col steps (e.g. location) — keep card size consistent with the
+       3-col steps so cards don't balloon when there are fewer of them. */
+    html.variant-E .grid-cols-2 { max-width: 510px; }
     html.variant-E .opt-label { font-weight: 600; letter-spacing: -0.012em; }
     html.variant-E .opt-check {
       width: 20px; height: 20px;
@@ -453,6 +695,52 @@
     /* step */
     .step-content { flex: 1; display: flex; flex-direction: column; animation: fadeUp 320ms cubic-bezier(.2,.7,.2,1); }
     @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Slide stage — holds outgoing + incoming step during step transitions.
+       Uses a single-cell grid so both children stack on top of each other
+       and the cell sizes to the taller child — no vertical jump as one
+       step replaces another with different content height. */
+    .step-stage {
+      position: relative;
+      flex: 1;
+      display: grid;
+      grid-template-areas: "slot";
+      align-items: stretch;
+      overflow: hidden;
+      padding: 6px;
+      margin: -6px;
+    }
+    .step-stage .step-content--in,
+    .step-stage .step-content--out {
+      grid-area: slot;
+      min-width: 0;
+      animation: none; /* override base fadeUp; we'll drive via stage classes */
+    }
+    .step-stage .step-content--out { pointer-events: none; }
+    .step-stage--forward .step-content--in  { animation: vF-slide-in-right 600ms cubic-bezier(.2,.8,.2,1) both; }
+    .step-stage--forward .step-content--out { animation: vF-slide-out-left 600ms cubic-bezier(.2,.8,.2,1) both; }
+    .step-stage--back    .step-content--in  { animation: vF-slide-in-left 600ms cubic-bezier(.2,.8,.2,1) both; }
+    .step-stage--back    .step-content--out { animation: vF-slide-out-right 600ms cubic-bezier(.2,.8,.2,1) both; }
+    @keyframes vF-slide-in-right {
+      from { opacity: 0; transform: translateX(48px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes vF-slide-out-left {
+      from { opacity: 1; transform: translateX(0); }
+      to   { opacity: 0; transform: translateX(-48px); }
+    }
+    @keyframes vF-slide-in-left {
+      from { opacity: 0; transform: translateX(-48px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes vF-slide-out-right {
+      from { opacity: 1; transform: translateX(0); }
+      to   { opacity: 0; transform: translateX(48px); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .step-stage .step-content--in,
+      .step-stage .step-content--out { animation: none; }
+    }
 
     .header { margin-bottom: 32px; text-align: center; }
     .title {
@@ -859,7 +1147,12 @@
     // Variant flag — read once on load and tag <html> so CSS / JSX can
     // branch on it. e.g. ?variant=B hides the review bar.
     var __m = location.search.match(/[?&]variant=([^&]+)/);
-    if (__m) document.documentElement.classList.add('variant-' + __m[1]);
+    if (__m) {
+      document.documentElement.classList.add('variant-' + __m[1]);
+      // Inheritance: F → E. G → F → E.
+      if (['F','G'].includes(__m[1])) document.documentElement.classList.add('variant-E');
+      if (__m[1] === 'G')             document.documentElement.classList.add('variant-F');
+    }
   </script>
   <div id="root"></div>
 
@@ -915,7 +1208,7 @@
         options: [
           { id: "KITCHENETTE", label: "Küchenzeile", glyph: "shape-kitchenette" },
           { id: "TWO_LINER",   label: "Zweizeiler",   glyph: "shape-two-liner" },
-          { id: "L_FORM",      label: "L-Form",       glyph: "shape-l-form" },
+          { id: "L_FORM",      label: "L-Form",       glyph: "shape-l-form", popular: true },
           { id: "U_FORM",      label: "U-Form",       glyph: "shape-u-form" },
           { id: "ISLAND",      label: "Kücheninsel",  glyph: "shape-island" },
           { id: "OTHER_SHAPE", label: "Andere Form / steht noch nicht fest", glyph: "shape-other" },
@@ -938,7 +1231,7 @@
         type: "grid", cols: 4,
         options: [
           { id: "T_1_3",   label: "1–3 Monate",  glyph: "timing-1-3" },
-          { id: "T_4_6",   label: "4–6 Monate",  glyph: "timing-4-6" },
+          { id: "T_4_6",   label: "4–6 Monate",  glyph: "timing-4-6", popular: true },
           { id: "T_7_12",  label: "7–12 Monate", glyph: "timing-7-12" },
           { id: "T_12P",   label: "12+ Monate",  glyph: "timing-12plus" },
         ],
@@ -951,7 +1244,7 @@
         options: [
           { id: "B_LT5",     label: "unter 5.000 €",        glyph: "budget-tier-1" },
           { id: "B_5_10",    label: "5.000 € – 10.000 €",   glyph: "budget-tier-2" },
-          { id: "B_10_15",   label: "10.000 € – 15.000 €",  glyph: "budget-tier-3" },
+          { id: "B_10_15",   label: "10.000 € – 15.000 €",  glyph: "budget-tier-3", popular: true },
           { id: "B_15_20",   label: "15.000 € – 20.000 €",  glyph: "budget-tier-4" },
           { id: "B_GT20",    label: "über 20.000 €",        glyph: "budget-tier-5" },
         ],
@@ -991,6 +1284,20 @@
       const [submitted, setSubmitted] = useState(false);
       const [contact, setContact] = useState({ anrede: "Herr", name: "", email: "", phoneCountry: "DE", phone: "", plz: "" });
       const [touched, setTouched] = useState({});
+      // Variant F = CRO additions on top of Modern.
+      const isF = typeof document !== 'undefined' && document.documentElement.classList.contains('variant-F');
+      // Variant G = Modern + a 4-second intro splash before the funnel slides in.
+      const isG = typeof document !== 'undefined' && document.documentElement.classList.contains('variant-G');
+      const [splash, setSplash] = useState(isG ? 'visible' : 'gone'); // 'visible' | 'leaving' | 'gone'
+      const [uspIdx, setUspIdx] = useState(0);
+      useEffect(() => {
+        if (!isG) return;
+        const TOTAL = 4300; // bar fills in 4.3s, then splash slides out
+        const t1 = setTimeout(() => setSplash('leaving'), TOTAL);
+        const t2 = setTimeout(() => setSplash('gone'), TOTAL + 800);
+        const tick = setInterval(() => setUspIdx((i) => Math.min(i + 1, 2)), 1600);
+        return () => { clearTimeout(t1); clearTimeout(t2); clearInterval(tick); };
+      }, [isG]);
 
       useEffect(() => {
         document.documentElement.style.setProperty("--accent", "#781e39");
@@ -999,7 +1306,10 @@
 
       const step = STEPS[stepIdx];
       const total = STEPS.length;
-      const progress = ((stepIdx + (submitted ? 1 : 0)) / total) * 100;
+      const rawProgress = ((stepIdx + (submitted ? 1 : 0)) / total) * 100;
+      // Endowed-progress effect (Nunes & Drèze 2006): show the bar already
+      // ~12% filled on step 1 so the user feels they've made a head-start.
+      const progress = isF ? 12 + rawProgress * 0.88 : rawProgress;
 
       const errs = useMemo(() => ({
         name: contact.name.trim().length < 2 ? "Bitte Vor- und Nachname angeben" : null,
@@ -1010,13 +1320,28 @@
 
       const formValid = !errs.name && !errs.email && !errs.phone && !errs.plz;
 
+      // Slide direction + outgoing snapshot for the slide-out animation.
+      const [direction, setDirection] = useState('forward');
+      const [outgoing, setOutgoing] = useState(null); // {stepIdx, step}
+      const outgoingTimer = React.useRef(null);
+      function startTransition(nextIdx, dir) {
+        if (outgoingTimer.current) clearTimeout(outgoingTimer.current);
+        setDirection(dir);
+        setOutgoing({ stepIdx, step });
+        setStepIdx(nextIdx);
+        outgoingTimer.current = setTimeout(() => setOutgoing(null), 600);
+      }
       function pick(stepId, value) {
         setAnswers((a) => ({ ...a, [stepId]: value }));
         if (STEPS.find(s => s.id === stepId).type !== "form") {
-          setTimeout(() => setStepIdx((i) => Math.min(i + 1, total - 1)), 320);
+          // Let the microreward play, then transition.
+          setTimeout(() => startTransition(Math.min(stepIdx + 1, total - 1), 'forward'), 560);
         }
       }
-      function back() { setStepIdx((i) => Math.max(0, i - 1)); }
+      function back() {
+        if (stepIdx === 0) return;
+        startTransition(Math.max(0, stepIdx - 1), 'back');
+      }
       function submit() {
         setTouched({ name: true, email: true, phone: true, plz: true });
         if (formValid) setSubmitted(true);
@@ -1025,23 +1350,92 @@
       return (
         <div className="page">
           <div className="card">
+            {splash !== 'gone' && (() => {
+              const USPS = [
+                {
+                  label: "Persönlicher Berater meldet sich",
+                  svg: (
+                    <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                      <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                  )
+                },
+                {
+                  label: "Über 60 Hersteller im Vergleich",
+                  svg: (
+                    <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="3" y="3" width="7" height="7" rx="1"/>
+                      <rect x="14" y="3" width="7" height="7" rx="1"/>
+                      <rect x="14" y="14" width="7" height="7" rx="1"/>
+                      <rect x="3" y="14" width="7" height="7" rx="1"/>
+                    </svg>
+                  )
+                },
+                {
+                  label: "Kostenlos & unverbindlich",
+                  svg: (
+                    <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                      <path d="m9 12 2 2 4-4"/>
+                    </svg>
+                  )
+                },
+              ];
+              const cur = USPS[Math.min(uspIdx, USPS.length - 1)];
+              return (
+                <div className={`splash splash--${splash}`} aria-hidden={splash === 'leaving'}>
+                  <div className="splash__stage">
+                    <div className="splash__usp" key={uspIdx}>
+                      <div className="splash__icon">{cur.svg}</div>
+                      <p className="splash__label">{cur.label}</p>
+                    </div>
+                    <div className="splash__bar" aria-hidden="true">
+                      <div className="splash__bar-fill" />
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
             <ReviewBar />
             <div className="card-body">
               <Nav stepIdx={stepIdx} total={total} onBack={back} submitted={submitted} />
               <Progress value={progress} />
               {!submitted ? (
-                <div className="step-content" key={stepIdx}>
-                  <Header title={step.title} subtitle={step.subtitle} />
-                  {step.type === "grid" && (
-                    <GridStep step={step} selected={answers[step.id]} onPick={(v) => pick(step.id, v)} />
+                <div className={`step-stage step-stage--${direction}`}>
+                  {outgoing && (
+                    <div className="step-content step-content--out" key={'out-' + outgoing.stepIdx} aria-hidden="true">
+                      <Header title={outgoing.step.title} subtitle={outgoing.step.subtitle} />
+                      {outgoing.step.type === "grid" && (
+                        <GridStep step={outgoing.step} selected={answers[outgoing.step.id]} onPick={() => {}} />
+                      )}
+                      {outgoing.step.type === "form" && (
+                        <FormStep
+                          contact={contact} setContact={setContact}
+                          touched={touched} setTouched={setTouched}
+                          errs={errs} formValid={formValid} onSubmit={() => {}}
+                          isF={isF}
+                        />
+                      )}
+                    </div>
                   )}
-                  {step.type === "form" && (
-                    <FormStep
-                      contact={contact} setContact={setContact}
-                      touched={touched} setTouched={setTouched}
-                      errs={errs} formValid={formValid} onSubmit={submit}
+                  <div className="step-content step-content--in" key={stepIdx}>
+                    <Header
+                      title={step.title}
+                      subtitle={step.subtitle}
                     />
-                  )}
+                    {step.type === "grid" && (
+                      <GridStep step={step} selected={answers[step.id]} onPick={(v) => pick(step.id, v)} />
+                    )}
+                    {step.type === "form" && (
+                      <FormStep
+                        contact={contact} setContact={setContact}
+                        touched={touched} setTouched={setTouched}
+                        errs={errs} formValid={formValid} onSubmit={submit}
+                        isF={isF}
+                      />
+                    )}
+                  </div>
                 </div>
               ) : (
                 <Success answers={answers} contact={contact} />
@@ -1155,9 +1549,18 @@
         </div>
       );
     }
-    function Header({ title, subtitle }) {
+    function Header({ title, subtitle, timeLeft }) {
       return (
         <div className="header">
+          {timeLeft != null && timeLeft > 0 && (
+            <div className="time-left" aria-label={`Noch etwa ${timeLeft} Sekunden`}>
+              <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                <circle cx="6" cy="6" r="4.5" stroke="currentColor" strokeWidth="1.2" />
+                <path d="M6 3.5V6l1.5 1" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+              </svg>
+              <span>Noch ca. {timeLeft} Sek.</span>
+            </div>
+          )}
           <h1 className="title">{title}</h1>
           {subtitle && <p className="subtitle">{subtitle}</p>}
         </div>
@@ -1173,7 +1576,7 @@
                 key={opt.id}
                 selected={selected === opt.id}
                 onSelect={() => onPick(opt.id)}
-                label={opt.label} hint={opt.hint} glyph={opt.glyph}
+                label={opt.label} hint={opt.hint} glyph={opt.glyph} popular={opt.popular}
               />
             ))}
           </div>
@@ -1189,6 +1592,15 @@
         </>
       );
     }
+    function ValidCheck() {
+      return (
+        <span className="valid-check" aria-hidden="true">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M2.5 6.5l2.2 2.2L9.5 3.8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </span>
+      );
+    }
     function Plus() {
       return (
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
@@ -1196,14 +1608,28 @@
         </svg>
       );
     }
-    function Card({ selected, onSelect, label, hint, glyph }) {
+    function Card({ selected, onSelect, label, hint, glyph, popular }) {
+      // Only bounce on transitions from unselected → selected (not on mount
+      // when navigating back to a step where this card was already chosen).
+      const [justSel, setJustSel] = React.useState(false);
+      const prevSel = React.useRef(selected);
+      React.useEffect(() => {
+        if (!prevSel.current && selected) {
+          setJustSel(true);
+          const t = setTimeout(() => setJustSel(false), 600);
+          prevSel.current = selected;
+          return () => clearTimeout(t);
+        }
+        prevSel.current = selected;
+      }, [selected]);
       return (
         <button
           type="button"
-          className={`opt-card ${selected ? "is-selected" : ""}`}
+          className={`opt-card ${selected ? "is-selected" : ""} ${justSel ? "is-just-selected" : ""} ${popular ? "is-popular" : ""}`}
           onClick={onSelect}
           aria-pressed={selected}
         >
+          {popular && <span className="opt-badge" aria-label="Beliebteste Wahl">Beliebt</span>}
           <span className="opt-check" aria-hidden="true">
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
               <path d="M2.5 6.5l2.2 2.2L9.5 3.8" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
@@ -1218,12 +1644,34 @@
       );
     }
 
-    function FormStep({ contact, setContact, touched, setTouched, errs, formValid, onSubmit }) {
+    function FormStep({ contact, setContact, touched, setTouched, errs, formValid, onSubmit, isF }) {
       const set = (k, v) => setContact((c) => ({ ...c, [k]: v }));
       const blur = (k) => setTouched((t) => ({ ...t, [k]: true }));
       const showErr = (k) => touched[k] && errs[k];
+      // Live "valid" — green check appears as user types and field becomes valid.
+      const isValid = (k) => contact[k] && contact[k].toString().trim().length > 0 && !errs[k];
+      // Linger tooltip — fires after 8s of inactivity on the contact step.
+      const [lingered, setLingered] = useState(false);
+      const [touchedAny, setTouchedAny] = useState(false);
+      useEffect(() => {
+        if (!isF) return;
+        if (touchedAny) { setLingered(false); return; }
+        const t = setTimeout(() => setLingered(true), 8000);
+        return () => clearTimeout(t);
+      }, [isF, touchedAny, contact]);
+      const wrapSet = (k, v) => { setTouchedAny(true); set(k, v); };
       return (
         <div className="form-step">
+          {isF && (
+            <div className="consultant" role="note">
+              <img className="consultant__avatar consultant__avatar--img" src="./assets/avatar-group.png" alt="" />
+              <span className="consultant__meta">
+                <span className="consultant__name">Ein Mitglied unseres Teams</span>
+                <span className="consultant__role">meldet sich in Kürze bei Ihnen</span>
+              </span>
+            </div>
+          )}
+
           {/* Anrede */}
           <div className="anrede" role="radiogroup" aria-label="Anrede">
             {ANREDE.map(a => (
@@ -1237,41 +1685,59 @@
           </div>
 
           <div className="form-grid">
-            <label className={`field ${showErr("name") ? "has-error" : ""}`}>
+            <label className={`field ${showErr("name") ? "has-error" : ""} ${isValid("name") ? "is-valid" : ""}`}>
               <span className="field-label">Vorname & Nachname*</span>
-              <input className="input" type="text" autoComplete="name"
-                value={contact.name} onChange={(e) => set("name", e.target.value)} onBlur={() => blur("name")}
-                placeholder="Anna Müller" />
+              <div className="input-wrap">
+                <input className="input" type="text" autoComplete="name"
+                  value={contact.name} onChange={(e) => wrapSet("name", e.target.value)} onBlur={() => blur("name")}
+                  placeholder="Anna Müller" />
+                <ValidCheck />
+              </div>
               {showErr("name") && <span className="field-err">{errs.name}</span>}
             </label>
 
-            <label className={`field ${showErr("email") ? "has-error" : ""}`}>
+            <label className={`field ${showErr("email") ? "has-error" : ""} ${isValid("email") ? "is-valid" : ""}`}>
               <span className="field-label">E-Mail-Adresse*</span>
-              <input className="input" type="email" autoComplete="email"
-                value={contact.email} onChange={(e) => set("email", e.target.value)} onBlur={() => blur("email")}
-                placeholder="anna@beispiel.de" />
+              <div className="input-wrap">
+                <input className="input" type="email" autoComplete="email"
+                  value={contact.email} onChange={(e) => wrapSet("email", e.target.value)} onBlur={() => blur("email")}
+                  placeholder="anna@beispiel.de" />
+                <ValidCheck />
+              </div>
+              <span className="field-hint">Nur für Ihr Angebot — kein Newsletter, keine Weitergabe.</span>
               {showErr("email") && <span className="field-err">{errs.email}</span>}
+              {isF && lingered && (
+                <span className="linger-tip" role="status">
+                  Warum wir das brauchen: damit wir Ihnen Ihr persönliches Angebot zusenden können.
+                </span>
+              )}
             </label>
 
-            <label className={`field ${showErr("phone") ? "has-error" : ""}`}>
+            <label className={`field ${showErr("phone") ? "has-error" : ""} ${isValid("phone") ? "is-valid" : ""}`}>
               <span className="field-label">Telefonnummer*</span>
               <div className="phone-row">
                 <select className="phone-country" value={contact.phoneCountry}
                   onChange={(e) => set("phoneCountry", e.target.value)}>
                   {COUNTRIES.map(c => <option key={c.code} value={c.code}>{c.label}</option>)}
                 </select>
-                <input className="input" type="tel" autoComplete="tel"
-                  value={contact.phone} onChange={(e) => set("phone", e.target.value)} onBlur={() => blur("phone")}
-                  placeholder="151 234 5678" />
+                <div className="input-wrap">
+                  <input className="input" type="tel" autoComplete="tel"
+                    value={contact.phone} onChange={(e) => wrapSet("phone", e.target.value)} onBlur={() => blur("phone")}
+                    placeholder="151 234 5678" />
+                  <ValidCheck />
+                </div>
               </div>
               {showErr("phone") && <span className="field-err">{errs.phone}</span>}
             </label>
 
-            <label className={`field ${showErr("plz") ? "has-error" : ""}`}>
+            <label className={`field ${showErr("plz") ? "has-error" : ""} ${isValid("plz") ? "is-valid" : ""}`}>
               <span className="field-label">Postleitzahl*</span>
-              <input className="input" type="text" autoComplete="postal-code" inputMode="numeric"
-                value={contact.plz} onChange={(e) => set("plz", e.target.value)} onBlur={() => blur("plz")}
-                placeholder="10115" />
+              <div className="input-wrap">
+                <input className="input" type="text" autoComplete="postal-code" inputMode="numeric"
+                  value={contact.plz} onChange={(e) => wrapSet("plz", e.target.value)} onBlur={() => blur("plz")}
+                  placeholder="10115" />
+                <ValidCheck />
+              </div>
               {showErr("plz") && <span className="field-err">{errs.plz}</span>}
             </label>
           </div>
