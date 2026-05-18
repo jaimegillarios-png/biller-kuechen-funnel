@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Küchenplaner — Beispiel-Landingpage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #F4F4F2;
+      --paper: #FFFFFF;
+      --ink: #15171A;
+      --ink-2: #4A4F55;
+      --ink-3: #7B8087;
+      --line: rgba(15,17,16,0.08);
+      --accent: #15171A;
+      --container: 1120px;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      line-height: 1.5;
+    }
+
+    /* ─── section 1: hero ─── */
+    .hero {
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 96px 24px 24px;
+      text-align: center;
+    }
+    .eyebrow {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-size: clamp(36px, 5vw, 56px);
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1.08;
+      margin: 0 0 20px;
+      text-wrap: balance;
+    }
+    .hero p {
+      font-size: clamp(16px, 1.4vw, 18px);
+      color: var(--ink-2);
+      max-width: 620px;
+      margin: 0 auto;
+      text-wrap: pretty;
+    }
+    .hero-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      margin-top: 32px;
+      padding: 14px 22px;
+      background: var(--ink);
+      color: var(--paper);
+      border: 0;
+      border-radius: 999px;
+      font-size: 14.5px;
+      font-weight: 600;
+      letter-spacing: -0.005em;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 160ms ease, box-shadow 160ms ease;
+      box-shadow: 0 8px 20px -10px rgba(15,17,16,0.5);
+    }
+    .hero-cta:hover { transform: translateY(-1px); box-shadow: 0 12px 24px -10px rgba(15,17,16,0.6); }
+    .hero-cta svg { width: 14px; height: 14px; }
+
+    /* ─── section 2: funnel ─── */
+    .funnel-section {
+      padding: 0 0 96px;
+    }
+    .funnel-wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .funnel-frame {
+      width: 100%;
+      border: 0;
+      display: block;
+      background: transparent;
+      min-height: 760px;
+    }
+
+    @media (max-width: 720px) {
+      .hero { padding: 56px 20px 16px; }
+      .funnel-section { padding: 0 0 56px; }
+      .funnel-wrap { padding: 0; }
+      .funnel-frame { min-height: 820px; }
+    }
+  </style>
+</head>
+<body>
+
+<section class="hero">
+  <span class="eyebrow">Neu · Online-Küchenplaner</span>
+  <h1>Planen Sie Ihre Traumküche in 60 Sekunden.</h1>
+  <p>Beantworten Sie ein paar kurze Fragen und erhalten Sie ein unverbindliches Angebot — kostenlos und ohne Anmeldung.</p>
+  <a class="hero-cta" href="#planer">
+    Jetzt starten
+    <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </a>
+</section>
+
+<section class="funnel-section" id="planer">
+  <div class="funnel-wrap">
+    <iframe
+      id="funnelFrame"
+      class="funnel-frame"
+      src="../v14/funnel-traumkuche.html?standalone=1&amp;variant=E"
+      title="Küchenplaner"
+      scrolling="no"></iframe>
+  </div>
+</section>
+
+<script>
+  // Auto-size the funnel iframe to its content so the section grows
+  // as the viewport narrows and content wraps to more rows.
+  (function () {
+    var frame = document.getElementById('funnelFrame');
+    if (!frame) return;
+    var ro;
+    function fit() {
+      try {
+        var doc = frame.contentDocument;
+        if (!doc || !doc.body) return;
+        var h = Math.max(
+          doc.documentElement.scrollHeight,
+          doc.body.scrollHeight
+        );
+        if (h > 0) frame.style.height = h + 'px';
+      } catch (e) { /* cross-origin or not ready */ }
+    }
+    function bind() {
+      try {
+        var doc = frame.contentDocument;
+        if (!doc) return;
+        fit();
+        if (typeof ResizeObserver !== 'undefined') {
+          ro && ro.disconnect();
+          ro = new ResizeObserver(fit);
+          ro.observe(doc.documentElement);
+          if (doc.body) ro.observe(doc.body);
+        } else {
+          // fallback poll
+          setInterval(fit, 400);
+        }
+      } catch (e) {}
+    }
+    frame.addEventListener('load', bind);
+    window.addEventListener('resize', fit);
+    // initial in case load fired before listener attached
+    if (frame.contentDocument && frame.contentDocument.readyState === 'complete') bind();
+  })();
+</script>
+
+</body>
+</html>
