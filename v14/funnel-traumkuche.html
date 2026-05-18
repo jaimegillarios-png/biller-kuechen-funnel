@@ -147,7 +147,7 @@
     }
     html.variant-E .card-body {
       background: #F8F8F9;
-      padding: 28px 40px 40px;
+      padding: 14px 40px 40px;
     }
     @media (max-width: 880px) {
       html.variant-E .card-body { padding: 20px 20px 28px; }
@@ -158,7 +158,7 @@
       }
     }
 
-    /* Review bar: light, glass-like, hairline divider */
+    /* Review bar: light glass on desktop, dark grey on mobile */
     html.variant-E .review-bar {
       background: #FAFBFA;
       color: #1A1D1B;
@@ -167,21 +167,30 @@
       letter-spacing: 0;
     }
     html.variant-E .review-bar-inner { padding: 10px 40px; min-height: 40px; gap: 14px; }
+    html.variant-E .review-divider { background: rgba(15,17,16,0.10); height: 14px; }
+    html.variant-E .review-rating strong { font-weight: 600; color: #1A1D1B; font-size: 14px; }
+    html.variant-E .stars { color: #F5B400; }
+    html.variant-E .stars svg { width: 14px; height: 14px; }
+    html.variant-E .review-source { color: rgba(26,29,27,0.62); }
+    html.variant-E .review-trust { color: rgba(26,29,27,0.72); }
+
     @media (max-width: 880px) {
+      html.variant-E .review-bar {
+        background: #1F2326;
+        color: #FFFFFF;
+        border-bottom-color: rgba(255,255,255,0.06);
+      }
       html.variant-E .review-bar-inner {
         padding: 10px 16px;
         justify-content: center;
         flex-wrap: wrap;
       }
-      html.variant-E .review-trust { margin-left: 0; }
+      html.variant-E .review-trust { margin-left: 0; color: rgba(255,255,255,0.88); }
+      html.variant-E .review-source { color: rgba(255,255,255,0.78); }
+      html.variant-E .review-rating strong { color: #FFFFFF; font-size: 15px; }
+      html.variant-E .review-divider { background: rgba(255,255,255,0.18); }
+      html.variant-E .stars svg { width: 16px; height: 16px; }
     }
-    html.variant-E .review-divider { background: rgba(15,17,16,0.10); height: 14px; }
-    html.variant-E .review-rating strong { font-weight: 600; color: #1A1D1B; }
-    html.variant-E .stars { color: #F5B400; }
-    html.variant-E .stars svg { width: 14px; height: 14px; }
-    html.variant-E .review-rating strong { font-size: 14px; }
-    html.variant-E .review-source { color: rgba(26,29,27,0.62); }
-    html.variant-E .review-trust { color: rgba(26,29,27,0.72); }
     html.variant-E .status-dot {
       background: #16A34A;
       box-shadow: 0 0 0 3px rgba(22,163,74,0.18);
