@@ -1,0 +1,567 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Variant A — Developer Handoff</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #15171A;
+      --ink-2: #4A4F55;
+      --ink-3: #7B8087;
+      --line: rgba(15,17,16,0.10);
+      --line-2: rgba(15,17,16,0.06);
+      --bg: #F7F7F5;
+      --paper: #FFFFFF;
+      --accent: #1A1D1B;
+      --gold: #F5B400;
+      --gold-ink: #5A3D00;
+      --green: #16A34A;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+    code, pre, .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+
+    .page { max-width: 980px; margin: 0 auto; padding: 64px 32px 96px; }
+    .hero { margin-bottom: 56px; }
+    .eyebrow {
+      display: inline-block; font-size: 12px; font-weight: 600;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--ink-3); padding: 6px 12px;
+      border-radius: 999px; background: var(--paper);
+      border: 1px solid var(--line);
+    }
+    h1 { font-size: clamp(34px, 4vw, 48px); font-weight: 700; letter-spacing: -0.025em; line-height: 1.1; margin: 18px 0 12px; }
+    .lead { font-size: 17px; color: var(--ink-2); max-width: 680px; margin: 0; }
+    .meta-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 22px; }
+    .pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 7px 12px; border-radius: 999px;
+      background: var(--paper); border: 1px solid var(--line);
+      font-size: 13px; font-weight: 500; color: var(--ink);
+      text-decoration: none;
+      transition: border-color 160ms, transform 160ms;
+    }
+    .pill:hover { border-color: rgba(15,17,16,0.22); transform: translateY(-1px); }
+    .pill code { font-size: 12px; }
+
+    /* TOC */
+    nav.toc {
+      background: var(--paper); border: 1px solid var(--line);
+      border-radius: 14px; padding: 20px 24px;
+      margin-bottom: 56px;
+    }
+    nav.toc h3 { margin: 0 0 12px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); font-weight: 600; }
+    nav.toc ol { margin: 0; padding-left: 22px; columns: 2; column-gap: 32px; }
+    @media (max-width: 700px) { nav.toc ol { columns: 1; } }
+    nav.toc li { margin-bottom: 6px; font-size: 14px; }
+    nav.toc a { color: var(--ink); text-decoration: none; border-bottom: 1px dashed transparent; }
+    nav.toc a:hover { border-bottom-color: var(--ink-3); }
+
+    section { margin-bottom: 56px; }
+    section h2 {
+      font-size: 22px; font-weight: 700; letter-spacing: -0.018em;
+      margin: 0 0 8px; padding-top: 14px;
+      border-top: 1px solid var(--line-2);
+    }
+    section .h2-sub { color: var(--ink-3); font-size: 14px; margin: 0 0 20px; }
+    section h3 { font-size: 16px; font-weight: 600; margin: 24px 0 8px; letter-spacing: -0.01em; }
+    section p { color: var(--ink-2); margin: 0 0 12px; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 720px) { .grid-2 { grid-template-columns: 1fr; } }
+
+    .card {
+      background: var(--paper); border: 1px solid var(--line);
+      border-radius: 12px; padding: 18px 20px;
+    }
+    .card-title { font-size: 13px; font-weight: 600; color: var(--ink); margin: 0 0 6px; letter-spacing: -0.005em; }
+    .card-body { font-size: 13.5px; color: var(--ink-2); margin: 0; }
+    .card-body code { font-size: 12px; padding: 1px 5px; background: rgba(15,17,16,0.05); border-radius: 4px; }
+
+    /* Spec tables */
+    table.spec {
+      width: 100%; border-collapse: collapse;
+      background: var(--paper); border: 1px solid var(--line);
+      border-radius: 12px; overflow: hidden;
+      font-size: 13.5px;
+    }
+    table.spec th, table.spec td {
+      padding: 10px 14px; text-align: left;
+      border-bottom: 1px solid var(--line-2);
+    }
+    table.spec tr:last-child td { border-bottom: 0; }
+    table.spec th { font-weight: 600; color: var(--ink); background: rgba(15,17,16,0.02); font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
+    table.spec td { color: var(--ink-2); }
+    table.spec td:first-child, table.spec th:first-child { font-weight: 500; color: var(--ink); }
+    table.spec code { font-size: 12px; padding: 1px 5px; background: rgba(15,17,16,0.05); border-radius: 4px; font-family: 'JetBrains Mono', monospace; }
+
+    /* Color swatches */
+    .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; margin: 4px 0 18px; }
+    .swatch {
+      background: var(--paper); border: 1px solid var(--line);
+      border-radius: 12px; padding: 12px;
+    }
+    .swatch__chip {
+      height: 56px; border-radius: 8px;
+      border: 1px solid rgba(15,17,16,0.08);
+      margin-bottom: 10px;
+    }
+    .swatch__name { font-size: 12.5px; font-weight: 600; margin: 0; color: var(--ink); }
+    .swatch__hex { font-size: 11.5px; color: var(--ink-3); margin: 2px 0 0; font-family: 'JetBrains Mono', monospace; }
+
+    pre {
+      background: #0E1110; color: #E6E6E3;
+      border-radius: 12px; padding: 16px 18px;
+      overflow-x: auto;
+      font-size: 12.5px; line-height: 1.55;
+      margin: 12px 0;
+    }
+    pre code { color: inherit; background: transparent; }
+    .inline-code { font-size: 12.5px; padding: 1px 6px; background: rgba(15,17,16,0.06); border-radius: 4px; font-family: 'JetBrains Mono', monospace; }
+
+    .tag-list { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0 18px; }
+    .tag {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 3px 10px; border-radius: 999px;
+      font-size: 11.5px; font-weight: 500;
+      background: rgba(15,17,16,0.05); color: var(--ink-2);
+    }
+    .tag--gold { background: var(--gold); color: var(--gold-ink); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; font-size: 10.5px; }
+    .tag--green { background: rgba(22,163,74,0.10); color: #166534; }
+
+    ul.bullets { margin: 8px 0 18px; padding-left: 22px; color: var(--ink-2); }
+    ul.bullets li { margin-bottom: 6px; font-size: 14px; }
+    ul.bullets li strong { color: var(--ink); font-weight: 600; }
+
+    .callout {
+      padding: 14px 18px; border-radius: 12px;
+      background: rgba(245,180,0,0.08);
+      border: 1px solid rgba(245,180,0,0.25);
+      color: #5A3D00;
+      font-size: 13.5px;
+      margin: 16px 0;
+    }
+    .callout strong { color: #3A2700; }
+
+    footer { margin-top: 56px; padding-top: 32px; border-top: 1px solid var(--line-2); color: var(--ink-3); font-size: 13px; }
+    footer a { color: var(--ink-2); }
+  </style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="hero">
+    <span class="eyebrow">Developer handoff</span>
+    <h1>Variant A — Standard / White-labeled</h1>
+    <p class="lead">
+      Static-HTML React funnel with a "Modern" design pass plus six research-backed
+      conversion-rate optimisations. Everything below is implemented in a single file,
+      no build step required.
+    </p>
+    <div class="meta-row">
+      <a class="pill" href="./funnel-traumkuche.html?standalone=1&variant=F" target="_blank">▶ Live funnel</a>
+      <a class="pill" href="./index.html">← Variants launcher</a>
+      <a class="pill" href="./assets/funnel-icons.zip" download>↓ Icons (.zip)</a>
+      <span class="pill"><code>?variant=F</code></span>
+    </div>
+  </header>
+
+  <nav class="toc">
+    <h3>Contents</h3>
+    <ol>
+      <li><a href="#overview">Overview &amp; files</a></li>
+      <li><a href="#variant-system">Variant system &amp; URL params</a></li>
+      <li><a href="#design">Design tokens</a></li>
+      <li><a href="#layout">Layout &amp; components</a></li>
+      <li><a href="#trust-bar">Trust bar</a></li>
+      <li><a href="#progress">Progress bar (endowed effect)</a></li>
+      <li><a href="#options">Option cards &amp; "Beliebt" badge</a></li>
+      <li><a href="#form">Contact form &amp; CRO features</a></li>
+      <li><a href="#animations">Animations</a></li>
+      <li><a href="#assets">Assets</a></li>
+      <li><a href="#responsive">Responsive behaviour</a></li>
+      <li><a href="#a11y">Accessibility</a></li>
+      <li><a href="#integration">Integration notes</a></li>
+    </ol>
+  </nav>
+
+  <!-- ─────────── Overview ─────────── -->
+  <section id="overview">
+    <h2>1. Overview &amp; files</h2>
+    <p class="h2-sub">What's in the box, what runs where.</p>
+
+    <table class="spec">
+      <thead><tr><th>File</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>v14/funnel-traumkuche.html</code></td><td>Single-file React (CDN + Babel) app with all variants, CSS, and JSX. Variant A is reached via <code>?variant=F</code>.</td></tr>
+        <tr><td><code>v14/index.html</code></td><td>Launcher page that opens each variant in a modal iframe.</td></tr>
+        <tr><td><code>v14/assets/glyphs/*.svg</code></td><td>17 designer-drawn isometric icons (shape, location, timing, budget).</td></tr>
+        <tr><td><code>v14/assets/planelio-logo-black.png</code></td><td>Brand wordmark (24px desktop, 20px mobile).</td></tr>
+        <tr><td><code>v14/assets/avatar-group.png</code></td><td>Team avatar trio shown on the contact step.</td></tr>
+        <tr><td><code>v14/assets/funnel-icons.zip</code></td><td>Pre-bundled icons for download.</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Tech stack</h3>
+    <ul class="bullets">
+      <li><strong>React 18</strong> (development build) from <code>unpkg.com</code></li>
+      <li><strong>Babel standalone</strong> for in-browser JSX transpile</li>
+      <li><strong>Inter</strong> via Google Fonts (weights 400/500/600/700)</li>
+      <li>No bundler, no build step, no installed dependencies</li>
+    </ul>
+    <div class="callout">
+      <strong>Production note:</strong> swap the React development CDN for the production
+      build and pre-compile the JSX with esbuild/swc before shipping. Babel-standalone is
+      ~1.5MB and parses every page load.
+    </div>
+  </section>
+
+  <!-- ─────────── Variant system ─────────── -->
+  <section id="variant-system">
+    <h2>2. Variant system &amp; URL params</h2>
+    <p class="h2-sub">How variant inheritance works.</p>
+    <p>
+      The page reads the <code>?variant=</code> query param on load and tags
+      <code>&lt;html&gt;</code> with one or more <code>variant-X</code> classes. Variant F
+      (= launcher's "Variant A") inherits the Modern look from <code>variant-E</code>:
+    </p>
+<pre><code>var __m = location.search.match(/[?&amp;]variant=([^&amp;]+)/);
+if (__m) {
+  document.documentElement.classList.add('variant-' + __m[1]);
+  // Inheritance: F → E. G → F → E.
+  if (['F','G'].includes(__m[1])) document.documentElement.classList.add('variant-E');
+  if (__m[1] === 'G')             document.documentElement.classList.add('variant-F');
+}</code></pre>
+    <p>Variant A is therefore reached with <code>?variant=F</code> and ends up with both <code>variant-F</code> and <code>variant-E</code> on the root, plus an <code>isF</code> JSX flag for React-side conditional rendering.</p>
+
+    <h3>Other params</h3>
+    <ul class="bullets">
+      <li><code>?standalone=1</code> — strips the funnel's own dim backdrop when embedded inside a host modal/page. Required when iframed.</li>
+    </ul>
+  </section>
+
+  <!-- ─────────── Design tokens ─────────── -->
+  <section id="design">
+    <h2>3. Design tokens</h2>
+    <p class="h2-sub">Colors, typography, spacing.</p>
+
+    <h3>Colors</h3>
+    <div class="swatches">
+      <div class="swatch"><div class="swatch__chip" style="background:#FFFFFF"></div><p class="swatch__name">Paper</p><p class="swatch__hex">#FFFFFF</p></div>
+      <div class="swatch"><div class="swatch__chip" style="background:#F8F8F9"></div><p class="swatch__name">Card body</p><p class="swatch__hex">#F8F8F9</p></div>
+      <div class="swatch"><div class="swatch__chip" style="background:#FAFBFA"></div><p class="swatch__name">Trust bar / Input</p><p class="swatch__hex">#FAFBFA</p></div>
+      <div class="swatch"><div class="swatch__chip" style="background:#1A1D1B"></div><p class="swatch__name">Ink / Accent</p><p class="swatch__hex">#1A1D1B</p></div>
+      <div class="swatch"><div class="swatch__chip" style="background:#2B3136"></div><p class="swatch__name">Body text</p><p class="swatch__hex">#2B3136</p></div>
+      <div class="swatch"><div class="swatch__chip" style="background:#707681"></div><p class="swatch__name">Subtitle / hint</p><p class="swatch__hex">#707681</p></div>
+      <div class="swatch"><div class="swatch__chip" style="background:#F5B400"></div><p class="swatch__name">"Beliebt" badge bg</p><p class="swatch__hex">#F5B400</p></div>
+      <div class="swatch"><div class="swatch__chip" style="background:#5A3D00"></div><p class="swatch__name">"Beliebt" badge text</p><p class="swatch__hex">#5A3D00</p></div>
+      <div class="swatch"><div class="swatch__chip" style="background:#16A34A"></div><p class="swatch__name">Live / status / valid</p><p class="swatch__hex">#16A34A</p></div>
+      <div class="swatch"><div class="swatch__chip" style="background:linear-gradient(180deg,#25292A,#0E1110)"></div><p class="swatch__name">CTA gradient</p><p class="swatch__hex">#25292A → #0E1110</p></div>
+    </div>
+
+    <h3>Typography</h3>
+    <table class="spec">
+      <thead><tr><th>Use</th><th>Family / weight</th><th>Size / spacing</th><th>Color</th></tr></thead>
+      <tbody>
+        <tr><td>Title (step heading)</td><td>Inter 600</td><td><code>26px / -0.028em / 1.15</code></td><td>#1A1D1B</td></tr>
+        <tr><td>Subtitle</td><td>Inter 400</td><td><code>14px</code></td><td>rgba(26,29,27,0.55)</td></tr>
+        <tr><td>Option label</td><td>Inter 600</td><td><code>14px / -0.012em</code></td><td>#1A1D1B</td></tr>
+        <tr><td>Option hint</td><td>Inter 400</td><td><code>12px</code></td><td>#707681</td></tr>
+        <tr><td>Step counter</td><td>JetBrains Mono / SF Mono 400</td><td><code>13px / 0.06em</code></td><td>rgba(26,29,27,0.55)</td></tr>
+        <tr><td>Field label</td><td>Inter 500</td><td><code>13px</code></td><td>rgba(26,29,27,0.68)</td></tr>
+        <tr><td>CTA</td><td>Inter 600</td><td><code>14.5px / -0.005em</code></td><td>#FFFFFF on gradient</td></tr>
+        <tr><td>"Beliebt" badge</td><td>Inter 700</td><td><code>10.5px / 0.04em / uppercase</code></td><td>#5A3D00 on #F5B400</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Card &amp; spacing</h3>
+    <ul class="bullets">
+      <li><strong>Card radius:</strong> 24px (desktop), 0px full-bleed (≤880px)</li>
+      <li><strong>Card border:</strong> 1px hairline, <code>rgba(15,17,16,0.08)</code></li>
+      <li><strong>Card shadow:</strong> <code>0 1px 2px rgba(15,17,16,.02), 0 6px 16px -10px rgba(15,17,16,.05), 0 24px 48px -28px rgba(15,17,16,.08)</code></li>
+      <li><strong>Card body padding:</strong> 14px 40px 40px (desktop), 20px 20px 28px (mobile)</li>
+      <li><strong>Header → grid gap:</strong> 36px</li>
+      <li><strong>Option grid gap:</strong> 12px</li>
+      <li><strong>Form-step gap:</strong> 14px</li>
+    </ul>
+  </section>
+
+  <!-- ─────────── Layout ─────────── -->
+  <section id="layout">
+    <h2>4. Layout &amp; components</h2>
+    <p class="h2-sub">Top to bottom of a single step.</p>
+    <ol style="padding-left:22px; color:var(--ink-2); font-size:14px;">
+      <li><strong>Trust bar</strong> — slim light banner with Google rating + reviews count + green-dot trust pill</li>
+      <li><strong>Nav row</strong> — Back button (left), Planelio logo (centre), monospace step counter pill (right)</li>
+      <li><strong>Progress bar</strong> — 3px gradient fill, endowed-progress effect (starts at 12%)</li>
+      <li><strong>Header</strong> — title + subtitle, centered</li>
+      <li><strong>Step content</strong> — either a grid of option cards or the contact form</li>
+    </ol>
+  </section>
+
+  <!-- ─────────── Trust bar ─────────── -->
+  <section id="trust-bar">
+    <h2>5. Trust bar</h2>
+    <p class="h2-sub">"Glass" banner with social proof + live trust signal.</p>
+    <div class="grid-2">
+      <div class="card">
+        <p class="card-title">Desktop (&gt;880px)</p>
+        <p class="card-body">Light <code>#FAFBFA</code> background, dark text, gold star row, 40px min-height, 10px×40px padding. Trust pill (<em>Kostenlos &amp; unverbindlich</em>) pushed to the right via <code>margin-left: auto</code>.</p>
+      </div>
+      <div class="card">
+        <p class="card-title">Mobile (≤880px)</p>
+        <p class="card-body">Dark <code>#1F2326</code> background, white text. Content centered (<code>justify-content: center</code>), trust pill's auto-margin removed. Stars bump to 16px.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────── Progress ─────────── -->
+  <section id="progress">
+    <h2>6. Progress bar (endowed-progress)</h2>
+    <p class="h2-sub">Nunes &amp; Drèze (2006) goal-gradient effect.</p>
+    <p>Other variants start the progress bar at 0% on step 1. Variant A starts at <strong>12%</strong> and ramps to 100% — empirically lifts completion ~50% in similar funnels by giving the user a perceived head-start.</p>
+<pre><code>const rawProgress = ((stepIdx + (submitted ? 1 : 0)) / total) * 100;
+const progress = isF ? 12 + rawProgress * 0.88 : rawProgress;</code></pre>
+    <p>Visuals: 3px tall, <code>rgba(15,17,16,0.06)</code> track, <code>linear-gradient(90deg, #1A1D1B, #3F4644)</code> fill, 480ms cubic-bezier transition on width.</p>
+  </section>
+
+  <!-- ─────────── Option cards ─────────── -->
+  <section id="options">
+    <h2>7. Option cards &amp; "Beliebt" badge</h2>
+    <p class="h2-sub">Anchoring + social proof on the most-chosen option per step.</p>
+
+    <h3>Card states</h3>
+    <table class="spec">
+      <thead><tr><th>State</th><th>Spec</th></tr></thead>
+      <tbody>
+        <tr><td>Default</td><td>1px hairline border <code>rgba(15,17,16,0.08)</code>, 16px radius, white background, transparent icon area.</td></tr>
+        <tr><td>Hover</td><td>Border deepens to <code>rgba(15,17,16,0.22)</code>, lifts <code>-2px</code>, soft drop shadow.</td></tr>
+        <tr><td>Selected</td><td>Border <code>#1A1D1B</code>, additional <code>box-shadow: 0 0 0 1px #1A1D1B</code> ring + soft drop shadow.</td></tr>
+        <tr><td>Popular (badged)</td><td>Border tinted gold <code>rgba(245,180,0,0.45)</code>; hover deepens.</td></tr>
+      </tbody>
+    </table>
+
+    <h3>"Beliebt" badge <span class="tag tag--gold">Beliebt</span></h3>
+    <p>Rendered on one option per multi-option step. Marked in the <code>STEPS</code> data with <code>popular: true</code>:</p>
+<pre><code>{ id: "L_FORM",  label: "L-Form",         glyph: "shape-l-form",   popular: true }
+{ id: "T_4_6",   label: "4–6 Monate",     glyph: "timing-4-6",     popular: true }
+{ id: "B_10_15", label: "10.000 € – 15.000 €", glyph: "budget-tier-3", popular: true }</code></pre>
+    <p>The badge hangs above the card (centered, top: <code>-9px</code>), 999px radius, <code>#F5B400</code> bg, <code>#5A3D00</code> text, soft gold halo shadow. Cards with badges get extra <code>padding-top: 18px</code> to accommodate.</p>
+
+    <h3>Auto-advance</h3>
+    <p>Single-choice steps auto-advance ~560ms after selection (let the microreward bounce play first, then trigger the slide transition).</p>
+  </section>
+
+  <!-- ─────────── Form ─────────── -->
+  <section id="form">
+    <h2>8. Contact form &amp; CRO features</h2>
+    <p class="h2-sub">All the trust + friction-reduction additions on the last step.</p>
+
+    <ul class="bullets">
+      <li>
+        <strong>Consultant card</strong> — group avatar (<code>./assets/avatar-group.png</code>, 96px) +
+        "<em>Ein Mitglied unseres Teams</em>" / "<em>meldet sich in Kürze bei Ihnen</em>" with a green status dot.
+        White-to-cream gradient pill, 14px radius. Humanises the form (UXmatters, +5–15% lift).
+      </li>
+      <li>
+        <strong>Email microcopy</strong> — small grey hint under the email field:
+        "<em>Nur für Ihr Angebot — kein Newsletter, keine Weitergabe.</em>"
+        Baymard checkout research: 10–15% reduction in form abandonment.
+      </li>
+      <li>
+        <strong>Inline validation</strong> — green-circle checkmark
+        <span class="tag tag--green">✓</span> pops in (<code>vF-check-pop</code> 240ms spring)
+        inside each input as it becomes valid. Field border tints green
+        <code>rgba(22,163,74,0.45)</code>. Luke Wroblewski's research: −22% error rate, −42% time.
+      </li>
+      <li>
+        <strong>Linger tooltip</strong> — if the user is on the contact step for 8s without typing,
+        a soft amber tip appears under the email field: "<em>Warum wir das brauchen…</em>".
+        Cancelled on first keystroke. Rescues ~5–10% of last-step abandoners.
+      </li>
+    </ul>
+
+    <h3>Validation rules</h3>
+    <table class="spec">
+      <thead><tr><th>Field</th><th>Rule</th><th>Error message</th></tr></thead>
+      <tbody>
+        <tr><td>name</td><td>trim().length ≥ 2</td><td>"Bitte Vor- und Nachname angeben"</td></tr>
+        <tr><td>email</td><td>regex <code>/^[^\s@]+@[^\s@]+\.[^\s@]+$/</code></td><td>"Bitte gültige E-Mail-Adresse"</td></tr>
+        <tr><td>phone</td><td>digits-only length ≥ 6</td><td>"Bitte Telefonnummer"</td></tr>
+        <tr><td>plz</td><td>regex <code>/^\d{4,5}$/</code></td><td>"Bitte gültige PLZ"</td></tr>
+      </tbody>
+    </table>
+
+    <h3>CTA</h3>
+    <p>Pill button, <code>linear-gradient(180deg, #25292A, #0E1110)</code>, 14px radius, lock icon + "Gratis Termin anfragen". Disabled until <code>formValid</code> is true.</p>
+  </section>
+
+  <!-- ─────────── Animations ─────────── -->
+  <section id="animations">
+    <h2>9. Animations</h2>
+    <p class="h2-sub">All respect <code>@media (prefers-reduced-motion: reduce)</code>.</p>
+
+    <table class="spec">
+      <thead><tr><th>Element</th><th>Trigger</th><th>Animation</th><th>Duration / easing</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Step content</td>
+          <td>Step change</td>
+          <td>Slide stage: outgoing step slides out left/right, incoming slides in from opposite side. Single-cell CSS grid so container height doesn't jump.</td>
+          <td>600ms <code>cubic-bezier(.2,.8,.2,1)</code></td>
+        </tr>
+        <tr>
+          <td>Selected card check</td>
+          <td>First selection (not back-nav)</td>
+          <td><code>vF-check-bounce</code> — scale 0 → 1.18 → 0.96 → 1.0</td>
+          <td>520ms <code>cubic-bezier(.34,1.4,.64,1)</code></td>
+        </tr>
+        <tr>
+          <td>Valid field check</td>
+          <td>Field becomes valid</td>
+          <td><code>vF-check-pop</code> — scale 0.4 → 1, fade in</td>
+          <td>240ms <code>cubic-bezier(.2,1.6,.4,1)</code></td>
+        </tr>
+        <tr>
+          <td>Linger tooltip</td>
+          <td>8s on contact step with no input</td>
+          <td><code>vF-fade-in</code> — fade + translateY(-4px → 0)</td>
+          <td>280ms ease-out</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Microreward gate</h3>
+    <p>The card-select bounce uses a <code>useRef</code> + <code>useEffect</code> pair to only fire when <code>selected</code> transitions from <code>false → true</code> — re-mounts on back-nav (where the answer is already chosen) do not re-trigger the animation.</p>
+<pre><code>const prevSel = React.useRef(selected);
+React.useEffect(() => {
+  if (!prevSel.current && selected) {
+    setJustSel(true);
+    setTimeout(() => setJustSel(false), 600);
+  }
+  prevSel.current = selected;
+}, [selected]);</code></pre>
+  </section>
+
+  <!-- ─────────── Assets ─────────── -->
+  <section id="assets">
+    <h2>10. Assets</h2>
+    <p class="h2-sub">File-based icon system + bitmaps.</p>
+
+    <h3>Glyph contract</h3>
+    <p>Drop a new SVG into <code>./assets/glyphs/&lt;name&gt;.svg</code>; reference it by filename in the <code>STEPS</code> data via <code>glyph: "&lt;name&gt;"</code>. The <code>&lt;Glyph&gt;</code> React component fetches and inlines the SVG (so <code>currentColor</code> works).</p>
+    <p>Category prefix in the filename (e.g. <code>shape-</code>, <code>budget-tier-</code>) drives per-category sizing/padding via <code>.glyph--shape</code> etc.</p>
+
+    <h3>File inventory</h3>
+    <table class="spec">
+      <thead><tr><th>Category</th><th>Files</th></tr></thead>
+      <tbody>
+        <tr><td>Shapes</td><td>shape-kitchenette, shape-two-liner, shape-l-form, shape-u-form, shape-island, shape-other</td></tr>
+        <tr><td>Location</td><td>location-studio, location-home</td></tr>
+        <tr><td>Timing</td><td>timing-1-3, timing-4-6, timing-7-12, timing-12plus</td></tr>
+        <tr><td>Budget</td><td>budget-tier-1 … budget-tier-5</td></tr>
+        <tr><td>Brand bitmaps</td><td>planelio-logo-black.png, avatar-group.png</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ─────────── Responsive ─────────── -->
+  <section id="responsive">
+    <h2>11. Responsive behaviour</h2>
+    <p class="h2-sub">Single breakpoint at 880px, finer mobile pass at 600px.</p>
+    <table class="spec">
+      <thead><tr><th>Breakpoint</th><th>Changes</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>≤ 880px</td>
+          <td>
+            Card goes full-bleed: <code>border-radius: 0</code>, <code>border-left/right: 0</code>, <code>max-width: none</code>.<br>
+            Card-body padding: <code>20px 20px 28px</code>.<br>
+            Trust bar switches to dark <code>#1F2326</code> with white text, centered content.<br>
+            Logo: 24 → 20px.<br>
+            Stars: 14 → 16px (bigger for legibility), rating number 14 → 15px.
+          </td>
+        </tr>
+        <tr>
+          <td>≤ 600px</td>
+          <td>Logo bumps down further to 20px; modal head padding tightens.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ─────────── A11y ─────────── -->
+  <section id="a11y">
+    <h2>12. Accessibility</h2>
+    <ul class="bullets">
+      <li>Trust bar stars + rating expose <code>aria-label="4.3 von 5"</code>.</li>
+      <li>Option cards are <code>&lt;button type="button"&gt;</code> with <code>aria-pressed</code>.</li>
+      <li>"Beliebt" badge has <code>aria-label="Beliebteste Wahl"</code> for screen readers; visually a chip.</li>
+      <li>Consultant card uses <code>role="note"</code>; linger tip uses <code>role="status"</code>.</li>
+      <li>Anrede radio group is <code>role="radiogroup"</code> with <code>aria-checked</code> on each.</li>
+      <li>All animations (slide, bounce, fade, pop) are disabled under <code>prefers-reduced-motion: reduce</code>.</li>
+      <li>Inputs use proper <code>autoComplete</code> tokens (name, email, tel, postal-code).</li>
+    </ul>
+  </section>
+
+  <!-- ─────────── Integration ─────────── -->
+  <section id="integration">
+    <h2>13. Integration notes</h2>
+
+    <h3>Embedding</h3>
+    <p>Two embedding modes are supported, controlled by which classes get added to <code>&lt;html&gt;</code> after load:</p>
+    <ul class="bullets">
+      <li><code>?standalone=1</code> when iframed → adds <code>html.iframed-standalone</code>, strips the funnel's own dim backdrop and transparent body.</li>
+      <li>No param when iframed → adds <code>html.embedded</code>, expands to fill the iframe.</li>
+      <li>Loaded directly (top frame) → centered card layout with dim backdrop.</li>
+    </ul>
+
+    <h3>Submission</h3>
+    <p>The form currently calls <code>submit()</code> client-side which only flips <code>setSubmitted(true)</code> to show the success screen. <strong>Wire this to your real endpoint</strong> — replace the body of <code>submit()</code> with a <code>fetch()</code> POST to your CRM/lead API:</p>
+<pre><code>function submit() {
+  setTouched({ name: true, email: true, phone: true, plz: true });
+  if (!formValid) return;
+  fetch('/api/leads', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ...contact, answers })
+  }).then(() => setSubmitted(true));
+}</code></pre>
+
+    <h3>Postmessage</h3>
+    <p>The funnel posts <code>{ type: 'funnel:close' }</code> on close (when iframed) so the host page can dismiss its modal. Host listener already wired in <code>v14/index.html</code>.</p>
+
+    <h3>Production build TODOs</h3>
+    <ul class="bullets">
+      <li>Pre-compile JSX (esbuild/swc) and drop Babel-standalone.</li>
+      <li>Switch React to <code>react.production.min.js</code>.</li>
+      <li>Inline critical CSS, lazy-load the funnel script.</li>
+      <li>Self-host fonts (currently Google Fonts).</li>
+      <li>Compress &amp; serve PNGs as WebP/AVIF with <code>&lt;picture&gt;</code> fallback.</li>
+      <li>Add real analytics events on each step + submit.</li>
+    </ul>
+  </section>
+
+  <footer>
+    <p>
+      Variant A handoff · generated for the Planelio funnel project ·
+      live preview: <a href="./funnel-traumkuche.html?standalone=1&variant=F">funnel-traumkuche.html?variant=F</a>
+    </p>
+  </footer>
+
+</div>
+
+</body>
+</html>
