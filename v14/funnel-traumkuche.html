@@ -244,12 +244,8 @@
       border-radius: inherit;
       overflow: hidden;
     }
-    .splash--visible { animation: vG-splash-in 420ms cubic-bezier(.2,.8,.2,1) both; }
-    .splash--leaving { animation: vG-splash-out 700ms cubic-bezier(.5, 0, .2, 1) both; }
-    @keyframes vG-splash-in {
-      from { opacity: 0; }
-      to   { opacity: 1; }
-    }
+    .splash--visible { opacity: 1; }
+    .splash--leaving { animation: vG-splash-out 420ms cubic-bezier(.5, 0, .2, 1) both; }
     @keyframes vG-splash-out {
       from { transform: translateX(0);     opacity: 1; }
       to   { transform: translateX(-100%); opacity: 1; }
@@ -308,6 +304,88 @@
     }
     @media (prefers-reduced-motion: reduce) {
       .splash--leaving, .splash__usp, .splash__bar-fill { animation: none !important; }
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       Exit-intent overlay (variant-F and above). Covers the entire
+       card with the same white surface, centered content.
+       ───────────────────────────────────────────────────────────── */
+    .exit-overlay {
+      position: absolute; inset: 0;
+      z-index: 40;
+      background: #FFFFFF;
+      display: flex; align-items: center; justify-content: center;
+      padding: 48px 40px;
+      border-radius: inherit;
+      animation: vF-exit-in 260ms cubic-bezier(.2,.8,.2,1) both;
+    }
+    @keyframes vF-exit-in {
+      from { opacity: 0; transform: scale(.985); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    .exit-overlay__inner {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 16px;
+      text-align: center;
+      max-width: 460px;
+    }
+    .exit-overlay__icon {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: rgba(15,17,16,0.05);
+      color: #1A1D1B;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 4px;
+    }
+    .exit-overlay__art {
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 4px;
+    }
+    .exit-overlay__art .exit-art__plane {
+      transform-origin: 106px 30px;
+      animation: vF-plane-glide 2.8s ease-in-out infinite;
+    }
+    @keyframes vF-plane-glide {
+      0%, 100% { transform: translate(0, 0)    rotate(0deg); }
+      50%      { transform: translate(2px,-3px) rotate(-3deg); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .exit-overlay__art .exit-art__plane { animation: none; }
+    }
+    .exit-overlay__title {
+      margin: 0;
+      font-size: 26px; font-weight: 600;
+      letter-spacing: -0.025em; line-height: 1.15;
+      color: #1A1D1B;
+      text-wrap: balance;
+    }
+    .exit-overlay__sub {
+      margin: 0;
+      font-size: 14.5px;
+      color: rgba(26,29,27,0.55);
+      line-height: 1.5;
+      max-width: 380px;
+      text-wrap: pretty;
+    }
+    .exit-overlay__primary {
+      width: auto !important;
+      min-width: 220px;
+      margin-top: 8px;
+    }
+    .exit-overlay__leave {
+      background: transparent;
+      border: 0;
+      padding: 6px 10px;
+      color: rgba(26,29,27,0.62);
+      font-size: 13.5px; font-weight: 500;
+      text-decoration: underline; text-underline-offset: 3px;
+      cursor: pointer;
+      transition: color 160ms ease;
+    }
+    .exit-overlay__leave:hover { color: #1A1D1B; }
+    @media (max-width: 600px) {
+      .exit-overlay { padding: 32px 24px; }
+      .exit-overlay__title { font-size: 22px; }
     }
 
 
@@ -1391,11 +1469,15 @@
       const isG = typeof document !== 'undefined' && document.documentElement.classList.contains('variant-G');
       const [splash, setSplash] = useState(isG ? 'visible' : 'gone'); // 'visible' | 'leaving' | 'gone'
       const [uspIdx, setUspIdx] = useState(0);
+      // Exit-intent overlay (variant-F and above). Fires when the cursor
+      // leaves the top of the viewport on desktop, once per session.
+      const [exitOpen, setExitOpen] = useState(false);
+      const [exitDismissed, setExitDismissed] = useState(false);
       useEffect(() => {
         if (!isG) return;
         const TOTAL = 4300; // bar fills in 4.3s, then splash slides out
         const t1 = setTimeout(() => setSplash('leaving'), TOTAL);
-        const t2 = setTimeout(() => setSplash('gone'), TOTAL + 800);
+        const t2 = setTimeout(() => setSplash('gone'), TOTAL + 460);
         const tick = setInterval(() => setUspIdx((i) => Math.min(i + 1, 2)), 1600);
         return () => { clearTimeout(t1); clearTimeout(t2); clearInterval(tick); };
       }, [isG]);
@@ -1404,6 +1486,30 @@
         document.documentElement.style.setProperty("--accent", "#781e39");
         document.documentElement.style.setProperty("--accent-soft", "#F7EDF0");
       }, []);
+
+      // Close-request handler. Triggered by:
+      //  • the funnel's own nav-close button (mobile)
+      //  • the launcher's X button via postMessage('host:close-request')
+      // If the user has answered ≥1 question (and not submitted), show the
+      // exit overlay; otherwise close immediately.
+      const answersCount = Object.keys(answers).length;
+      function requestClose() {
+        if (isF && !submitted && answersCount > 0) {
+          setExitOpen(true);
+        } else {
+          closeFunnelToHost();
+        }
+      }
+      useEffect(() => {
+        function onMsg(e) {
+          if (e && e.data && e.data.type === 'host:close-request') requestClose();
+        }
+        window.addEventListener('message', onMsg);
+        return () => window.removeEventListener('message', onMsg);
+      }, [isF, submitted, answersCount]);
+
+      function dismissExit() { setExitOpen(false); }
+      function confirmExit() { setExitOpen(false); closeFunnelToHost(); }
 
       const step = STEPS[stepIdx];
       const total = STEPS.length;
@@ -1498,9 +1604,45 @@
                 </div>
               );
             })()}
+            {exitOpen && (
+              <div className="exit-overlay" role="dialog" aria-modal="true" aria-labelledby="exit-title">
+                <div className="exit-overlay__inner">
+                  <div className="exit-overlay__art" aria-hidden="true">
+                    {/* Line-art paper plane being pulled back by a string —
+                        "your offer is almost on its way, don't cancel now". */}
+                    <svg width="120" height="100" viewBox="0 0 140 110" fill="none"
+                         stroke="#1A1D1B" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                      {/* Dashed trail showing the plane's curved path */}
+                      <path d="M16 86 Q40 60 70 56 T126 30" strokeDasharray="3 5" opacity="0.45" />
+
+                      {/* Paper plane body */}
+                      <g className="exit-art__plane">
+                        <path d="M82 28 L130 14 L110 50 Z" />
+                        {/* Fold line down the middle */}
+                        <path d="M82 28 L110 50" />
+                        {/* Inner fold (back wing) */}
+                        <path d="M97 38 L110 50" opacity="0.5" />
+                      </g>
+
+                      {/* Two small wind / motion arcs behind the plane */}
+                      <path d="M70 36 Q78 36 80 30" opacity="0.55" />
+                      <path d="M64 44 Q74 44 76 38" opacity="0.4" />
+                    </svg>
+                  </div>
+                  <h2 id="exit-title" className="exit-overlay__title">Wollen Sie wirklich abbrechen?</h2>
+                  <p className="exit-overlay__sub">Ihre Angaben werden nicht gespeichert und wir werden Ihnen kein Angebot erstellen können.</p>
+                  <button type="button" className="form-cta exit-overlay__primary" onClick={dismissExit}>
+                    Zurück zur Eingabe
+                  </button>
+                  <button type="button" className="exit-overlay__leave" onClick={confirmExit}>
+                    Ja, Seite verlassen
+                  </button>
+                </div>
+              </div>
+            )}
             <ReviewBar />
             <div className="card-body">
-              <Nav stepIdx={stepIdx} total={total} onBack={back} submitted={submitted} />
+              <Nav stepIdx={stepIdx} total={total} onBack={back} onClose={requestClose} submitted={submitted} />
               <Progress value={progress} />
               {!submitted ? (
                 <div className={`step-stage step-stage--${direction}`}>
@@ -1602,7 +1744,7 @@
     function closeFunnelToHost() {
       try { window.parent.postMessage({ type: 'funnel:close' }, '*'); } catch (e) {}
     }
-    function Nav({ stepIdx, total, onBack, submitted }) {
+    function Nav({ stepIdx, total, onBack, onClose, submitted }) {
       const stepNum = submitted ? total : stepIdx + 1;
       return (
         <>
@@ -1622,7 +1764,7 @@
               <span className="step-sep">/</span>
               <span className="step-tot">{total}</span>
             </div>
-            <button className="nav-close" onClick={closeFunnelToHost} aria-label="Schließen">
+            <button className="nav-close" onClick={onClose || closeFunnelToHost} aria-label="Schließen">
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                 <path d="M3 3l8 8M11 3l-8 8" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
               </svg>

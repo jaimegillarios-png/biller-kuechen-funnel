@@ -472,7 +472,7 @@
 <!-- v9 / v8 funnel overlays -->
 <div class="v9-overlay" id="v9Overlay" role="dialog" aria-modal="true" aria-label="Funnel">
   <div class="v9-frame-wrap">
-    <button class="v9-close" aria-label="Schließen" onclick="closeFunnel()">
+    <button class="v9-close" aria-label="Schließen" onclick="requestFunnelClose()">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6l-12 12"/></svg>
     </button>
     <iframe class="v9-frame" id="v9Frame" title="Funnel"></iframe>
@@ -494,6 +494,17 @@
     document.body.style.overflow = '';
     setTimeout(function(){ frame.src = 'about:blank'; }, 200);
   }
+  // Ask the funnel first — it may show an exit-confirmation overlay.
+  // The funnel responds with {type:'funnel:close'} when it's ok to close.
+  function requestFunnelClose() {
+    try {
+      if (frame && frame.contentWindow) {
+        frame.contentWindow.postMessage({ type: 'host:close-request' }, '*');
+        return;
+      }
+    } catch (e) {}
+    closeFunnel();
+  }
   // All variants currently open the same funnel — variant param is appended
   // to the URL so we can wire up real differences later inside each funnel.
   window.openTermin = function(variant) {
@@ -504,10 +515,10 @@
   };
 
   overlay.addEventListener('click', function(e) {
-    if (e.target === overlay) closeFunnel();
+    if (e.target === overlay) requestFunnelClose();
   });
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && overlay.classList.contains('is-open')) closeFunnel();
+    if (e.key === 'Escape' && overlay.classList.contains('is-open')) requestFunnelClose();
   });
   window.addEventListener('message', function(e) {
     if (e && e.data && e.data.type === 'funnel:close') closeFunnel();
