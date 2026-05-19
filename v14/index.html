@@ -98,6 +98,7 @@
     padding: 0 32px 96px;
     display: grid;
     grid-template-columns: 1fr 1fr;
+    align-items: start;
     gap: 32px;
   }
   .section {
@@ -137,6 +138,15 @@
     display: flex;
     flex-direction: column;
     gap: 14px;
+  }
+  .variants-group + .variants-group { margin-top: 28px; }
+  .variants-group__label {
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.10em; text-transform: uppercase;
+    color: var(--ink-3);
+    margin: 0 0 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--line);
   }
   .variant {
     background: var(--paper-2);
@@ -196,7 +206,7 @@
     letter-spacing: 0.005em;
     transition: background 0.15s;
   }
-  .variant__btn:hover { background: var(--accent); }
+  .variant__btn:hover { background: #3a3f44; }
   .variant__btn svg { width: 14px; height: 14px; }
 
   /* ─── Footer ─── */
@@ -329,7 +339,7 @@
 <div class="sections">
 
   <!-- ─── Booking funnel ─── -->
-  <div class="section">
+  <div class="section" style="order:2;">
     <div class="section__head">
       <h2 class="section__title">Terminfinder</h2>
       <p class="section__sub">Booking funnel: studio, consultation type, date, contact.</p>
@@ -387,67 +397,74 @@
       </a>
     </div>
 
-    <div class="variants">
-      <article class="variant">
-        <div class="variant__head">
-          <h3 class="variant__name">Standard / White-labeled</h3>
-          <span class="variant__id">Variant A</span>
-        </div>
-        <p class="variant__desc">Modern, white-labeled design with conversion-focused details: "Beliebt" badge, reassurance microcopy under the email field, endowed-progress bar, team card, inline validation, slide transitions, and selection microreward.</p>
-        <button type="button" class="variant__btn" onclick="openTraum('F')">
-          Open variant
-          <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-      </article>
+    <div class="variants-group">
+      <p class="variants-group__label">White-labeled</p>
+      <div class="variants">
+        <article class="variant">
+          <div class="variant__head">
+            <h3 class="variant__name">Standard / White-labeled</h3>
+            <span class="variant__id">Variant A</span>
+          </div>
+          <p class="variant__desc">Modern, white-labeled design with conversion-focused details: "Beliebt" badge, reassurance microcopy under the email field, endowed-progress bar, team card, inline validation, slide transitions, and selection microreward.</p>
+          <button type="button" class="variant__btn" onclick="openTraum('F')">
+            Open variant
+            <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </article>
 
-      <article class="variant">
-        <div class="variant__head">
-          <h3 class="variant__name">Intro splash</h3>
-          <span class="variant__id">Variant B</span>
-        </div>
-        <p class="variant__desc">Variant A plus a 4.3-second intro splash on open — rotating USPs with a loading bar, then slides out to the left to reveal the funnel.</p>
-        <button type="button" class="variant__btn" onclick="openTraum('G')">
-          Open variant
-          <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-      </article>
+        <article class="variant">
+          <div class="variant__head">
+            <h3 class="variant__name">Inline</h3>
+            <span class="variant__id">Variant B</span>
+          </div>
+          <p class="variant__desc">Whitelabel landing page (v16) with the Modern funnel embedded inline below the hero — no modal, the funnel sits directly in the page flow.</p>
+          <a class="variant__btn" href="../v16/index.html" target="_blank" rel="noopener">
+            Open variant
+            <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </article>
 
-      <article class="variant">
-        <div class="variant__head">
-          <h3 class="variant__name">Inline</h3>
-          <span class="variant__id">Variant C</span>
-        </div>
-        <p class="variant__desc">Whitelabel landing page (v16) with the Modern funnel embedded inline below the hero — no modal, the funnel sits directly in the page flow.</p>
-        <a class="variant__btn" href="../v16/index.html" target="_blank" rel="noopener">
-          Open variant
-          <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
-      </article>
+        <article class="variant">
+          <div class="variant__head">
+            <h3 class="variant__name">Intro splash</h3>
+            <span class="variant__id">Variant C</span>
+          </div>
+          <p class="variant__desc">Variant A plus a 4.3-second intro splash on open — rotating USPs with a loading bar, then slides out to the left to reveal the funnel.</p>
+          <button type="button" class="variant__btn" onclick="openTraum('G')">
+            Open variant
+            <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </article>
+      </div>
+    </div>
 
-      <article class="variant">
-        <div class="variant__head">
-          <h3 class="variant__name">No trust bar</h3>
-          <span class="variant__id">Variant D</span>
-        </div>
-        <p class="variant__desc">Removes the dark rating strip at the top of the funnel (Google rating + reviews). Tests whether the social-proof header helps or distracts.</p>
-        <button type="button" class="variant__btn" onclick="openTraum('B')">
-          Open variant
-          <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-      </article>
+    <div class="variants-group">
+      <p class="variants-group__label">Branded</p>
+      <div class="variants">
+        <article class="variant">
+          <div class="variant__head">
+            <h3 class="variant__name">Biller (Standard)</h3>
+            <span class="variant__id">Variant E</span>
+          </div>
+          <p class="variant__desc">Branded twin of Variant A — same Modern + CRO stack (badge, microcopy, validation, slide transitions, microreward) but uses the biller küchen logo and burgundy primary color.</p>
+          <button type="button" class="variant__btn" onclick="openTraum('H')">
+            Open variant
+            <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </article>
 
-      <article class="variant">
-        <div class="variant__head">
-          <h3 class="variant__name">Grey canvas</h3>
-          <span class="variant__id">Variant E</span>
-        </div>
-        <p class="variant__desc">Replaces the white card body with a very light grey so the white option cards stand out more against the background.</p>
-        <button type="button" class="variant__btn" onclick="openTraum('C')">
-          Open variant
-          <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-      </article>
-
+        <article class="variant">
+          <div class="variant__head">
+            <h3 class="variant__name">Möbel Martin (Standard)</h3>
+            <span class="variant__id">Variant F</span>
+          </div>
+          <p class="variant__desc">Branded twin of Variant A — same Modern + CRO stack but uses the Möbel Martin logo and brand red (#e30613) primary color.</p>
+          <button type="button" class="variant__btn" onclick="openTraum('I')">
+            Open variant
+            <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </article>
+      </div>
     </div>
   </div>
 

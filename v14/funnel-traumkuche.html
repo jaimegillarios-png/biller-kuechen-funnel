@@ -131,6 +131,108 @@
     html.variant-C .card-body { background: #F8F8F9; }
 
     /* ─────────────────────────────────────────────────────────────
+       variant=H → Branded twin of A. Same Modern + CRO stack, but
+       restores the biller küchen logo and swaps the charcoal accent
+       for burgundy (#781e39) across every CTA / selected state.
+       ───────────────────────────────────────────────────────────── */
+    html.variant-H.variant-E .brand img {
+      content: normal;          /* revert variant-E logo override */
+      height: 48px; width: auto;
+    }
+    @media (max-width: 600px) {
+      html.variant-H.variant-E .brand img { height: 40px; }
+    }
+    /* Accent swaps */
+    html.variant-H.variant-E .opt-card.is-selected {
+      border-color: #781e39;
+      box-shadow:
+        0 0 0 1px #781e39,
+        0 14px 32px -16px rgba(120,30,57,0.30);
+    }
+    html.variant-H.variant-E .opt-card.is-just-selected .opt-check,
+    html.variant-H.variant-E .opt-card.is-selected .opt-check {
+      background: #781e39; border-color: #781e39;
+    }
+    html.variant-H.variant-E .progress-fill {
+      background: linear-gradient(90deg, #781e39, #a83557);
+    }
+    html.variant-H.variant-E .step-counter .step-num { color: #781e39; }
+    html.variant-H.variant-E .anrede-opt.is-selected {
+      background: #781e39; border-color: #781e39; color: #FFFFFF;
+    }
+    html.variant-H.variant-E .input:focus,
+    html.variant-H.variant-E .phone-country:focus {
+      border-color: #781e39;
+      box-shadow: 0 0 0 4px rgba(120,30,57,0.10);
+    }
+    html.variant-H.variant-E .field.is-valid .input { border-color: #781e39; }
+    html.variant-H.variant-E .field.is-valid .valid-check { background: #781e39; }
+    html.variant-H.variant-E .form-cta {
+      background: linear-gradient(180deg, #8c2243, #5c1228);
+      box-shadow:
+        0 1px 0 rgba(255,255,255,0.06) inset,
+        0 10px 22px -10px rgba(120,30,57,0.55);
+    }
+    html.variant-H.variant-E .form-cta:hover:not(:disabled) {
+      box-shadow:
+        0 1px 0 rgba(255,255,255,0.08) inset,
+        0 14px 28px -12px rgba(120,30,57,0.60);
+    }
+    html.variant-H.variant-E .fallback.is-selected {
+      border-color: #781e39; background: #781e39; color: #FFFFFF;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       variant=I → Möbel Martin branded twin. Replaces the brand img
+       with the MM logo and swaps the accent to MM brand red (#e30613).
+       ───────────────────────────────────────────────────────────── */
+    html.variant-I.variant-E .brand img {
+      content: url("./assets/moebel-martin-logo.svg");
+      height: 40px; width: auto;
+    }
+    @media (max-width: 600px) {
+      html.variant-I.variant-E .brand img { height: 32px; }
+    }
+    html.variant-I.variant-E .opt-card.is-selected {
+      border-color: #e30613;
+      box-shadow:
+        0 0 0 1px #e30613,
+        0 14px 32px -16px rgba(227,6,19,0.30);
+    }
+    html.variant-I.variant-E .opt-card.is-just-selected .opt-check,
+    html.variant-I.variant-E .opt-card.is-selected .opt-check {
+      background: #e30613; border-color: #e30613;
+    }
+    html.variant-I.variant-E .progress-fill {
+      background: linear-gradient(90deg, #e30613, #b8050f);
+    }
+    html.variant-I.variant-E .step-counter .step-num { color: #e30613; }
+    html.variant-I.variant-E .anrede-opt.is-selected {
+      background: #e30613; border-color: #e30613; color: #FFFFFF;
+    }
+    html.variant-I.variant-E .input:focus,
+    html.variant-I.variant-E .phone-country:focus {
+      border-color: #e30613;
+      box-shadow: 0 0 0 4px rgba(227,6,19,0.10);
+    }
+    html.variant-I.variant-E .field.is-valid .input { border-color: #e30613; }
+    html.variant-I.variant-E .field.is-valid .valid-check { background: #e30613; }
+    html.variant-I.variant-E .form-cta {
+      background: linear-gradient(180deg, #ef1a26, #b8050f);
+      box-shadow:
+        0 1px 0 rgba(255,255,255,0.06) inset,
+        0 10px 22px -10px rgba(227,6,19,0.55);
+    }
+    html.variant-I.variant-E .form-cta:hover:not(:disabled) {
+      box-shadow:
+        0 1px 0 rgba(255,255,255,0.08) inset,
+        0 14px 28px -12px rgba(227,6,19,0.60);
+    }
+    html.variant-I.variant-E .fallback.is-selected {
+      border-color: #e30613; background: #e30613; color: #FFFFFF;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
        variant=G → 4-second white intro splash before the funnel.
        Logo + animated dots + tagline. Slides up out of frame.
        ───────────────────────────────────────────────────────────── */
@@ -1148,9 +1250,9 @@
     var __m = location.search.match(/[?&]variant=([^&]+)/);
     if (__m) {
       document.documentElement.classList.add('variant-' + __m[1]);
-      // Inheritance: F → E. G → F → E.
-      if (['F','G'].includes(__m[1])) document.documentElement.classList.add('variant-E');
-      if (__m[1] === 'G')             document.documentElement.classList.add('variant-F');
+      // Inheritance: F → E. G → F → E. H/I → F → E (branded twins of F).
+      if (['F','G','H','I'].includes(__m[1])) document.documentElement.classList.add('variant-E');
+      if (['G','H','I'].includes(__m[1]))     document.documentElement.classList.add('variant-F');
     }
   </script>
   <div id="root"></div>
