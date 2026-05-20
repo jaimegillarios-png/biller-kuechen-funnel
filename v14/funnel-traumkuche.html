@@ -474,6 +474,28 @@
       display: block;
       flex-shrink: 0;
     }
+    /* Three independent overlapping avatars. Each <img> is its own file
+       so the team can swap any one without touching the others. */
+    html.variant-F .consultant__avatars {
+      display: inline-flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    html.variant-F .consultant__avatar-pic {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #FFFFFF;
+      box-shadow: 0 0 0 2px #FFFFFF;
+      display: block;
+    }
+    html.variant-F .consultant__avatar-pic + .consultant__avatar-pic {
+      margin-left: -12px;
+    }
+    /* Leftmost on top, descending to the right (common pattern) */
+    html.variant-F .consultant__avatar-pic:nth-child(1) { z-index: 3; }
+    html.variant-F .consultant__avatar-pic:nth-child(2) { z-index: 2; }
+    html.variant-F .consultant__avatar-pic:nth-child(3) { z-index: 1; }
     html.variant-F .consultant__meta {
       display: flex; flex-direction: column; gap: 2px;
       text-align: left;
@@ -1907,7 +1929,11 @@
         <div className="form-step">
           {isF && (
             <div className="consultant" role="note">
-              <img className="consultant__avatar consultant__avatar--img" src="./assets/avatar-group.png" alt="" />
+              <span className="consultant__avatars" aria-hidden="true">
+                <img className="consultant__avatar-pic" src="./assets/avatar-1.png" alt="" />
+                <img className="consultant__avatar-pic" src="./assets/avatar-2.png" alt="" />
+                <img className="consultant__avatar-pic" src="./assets/avatar-3.png" alt="" />
+              </span>
               <span className="consultant__meta">
                 <span className="consultant__name">Ein Mitglied unseres Teams</span>
                 <span className="consultant__role">meldet sich in Kürze bei Ihnen</span>
