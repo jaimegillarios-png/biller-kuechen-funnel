@@ -233,13 +233,17 @@
     align-items: stretch;
     justify-content: stretch;
     padding: 0;
-    animation: v9-fade .2s ease both;
+    animation: v9-fade .14s ease-out both;
   }
   .v9-overlay.is-open { display: flex; }
   @keyframes v9-fade { from { opacity: 0; } to { opacity: 1; } }
   @keyframes v9-slide-up {
     from { transform: translate3d(0, 100%, 0); }
     to   { transform: translate3d(0, 0, 0); }
+  }
+  @keyframes v9-pop-up {
+    from { opacity: 0; transform: translate3d(0, 10px, 0); }
+    to   { opacity: 1; transform: translate3d(0, 0, 0); }
   }
   .v9-frame-wrap {
     position: relative;
@@ -251,6 +255,9 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    animation: v9-pop-up .26s cubic-bezier(.2, .9, .25, 1) both;
+    will-change: opacity, transform;
+    backface-visibility: hidden;
   }
   .v9-frame {
     flex: 1;
